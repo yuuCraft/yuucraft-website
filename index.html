@@ -1,66 +1,97 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0f172a" />
   <title>自己紹介 | yuuCraft</title>
+
+  <!-- フォント（必要なければ削除可） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="#" aria-label="yuuCraft ホーム">
+        <span class="brand-title">ゆーくらふと</span>
+        <span class="brand-sub">Web Developer & Creator</span>
+      </a>
 
-  <header class="header">
-    <nav class="nav">
-      <a href="#about">About</a>
-      <a href="#skills">Skills</a>
-      <a href="#works">Works</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <div class="hero">
-      <h1>ゆーくらふと</h1>
-      <p>Web Developer & Creator</p>
+      <button class="nav-toggle" aria-controls="primary-navigation" aria-expanded="false" aria-label="メニューを開く">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <nav id="primary-navigation" class="primary-nav" role="navigation" aria-label="メインナビゲーション">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#works">Works</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <section id="about" class="section">
-    <h2>👋 About Me</h2>
-    <p>こんにちは！Web制作とDiscordが好きです。</p>
-  </section>
-
-  <section id="skills" class="section">
-    <h2>🛠 Skills</h2>
-    <ul>
-      <li>HTML / CSS / JavaScript</li>
-      <li>TypeScript</li>
-      <li>GitHub / Replit</li>
-      <li>Discord Manage</li>
-    </ul>
-  </section>
-
-  <section id="works" class="section">
-    <h2>🖼 Works</h2>
-    <div class="work-cards">
-      <div class="card">
-        <h3>MusicOS</h3>
-        <p>MP3などを直接管理できるWebファイルマネージャー。</p>
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-inner">
+        <h1 id="hero-title">ゆーくらふと</h1>
+        <p class="lead">Web制作とコミュニティ運営が好きなフロントエンド開発者です。</p>
       </div>
-      <div class="card">
-        <h3>《開発中》ゆーくらTools</h3>
-        <p>使いやすい無料のWebツール。</p>
+    </section>
+
+    <section id="about" class="section container" aria-labelledby="about-title">
+      <h2 id="about-title">👋 About Me</h2>
+      <p>こんにちは！Web制作とDiscordが好きです。使いやすさとパフォーマンスを重視したフロントエンド開発を得意としています。</p>
+    </section>
+
+    <section id="skills" class="section container" aria-labelledby="skills-title">
+      <h2 id="skills-title">🛠 Skills</h2>
+      <ul class="skill-list">
+        <li>HTML / CSS / JavaScript</li>
+        <li>TypeScript</li>
+        <li>GitHub / Replit</li>
+        <li>Discord 管理・Bot</li>
+      </ul>
+    </section>
+
+    <section id="works" class="section container" aria-labelledby="works-title">
+      <h2 id="works-title">🖼 Works</h2>
+      <div class="work-grid" aria-live="polite">
+        <article class="card" aria-labelledby="work1-title">
+          <h3 id="work1-title">MusicOS</h3>
+          <p>MP3などを直接管理できるWebファイルマネージャー。</p>
+        </article>
+
+        <article class="card" aria-labelledby="work2-title">
+          <h3 id="work2-title">《開発中》ゆーくらTools</h3>
+          <p>使いやすい無料のWebツール。段階的に機能を追加中です��</p>
+        </article>
       </div>
+    </section>
+
+    <section id="contact" class="section container" aria-labelledby="contact-title">
+      <h2 id="contact-title">📬 Contact</h2>
+      <ul class="contact-list">
+        <li><a href="https://github.com/yuuCraft" target="_blank" rel="noopener noreferrer">GitHub：yuucraft</a></li>
+        <li><a href="https://twitter.com/yuuCraft1298" target="_blank" rel="noopener noreferrer">X（旧Twitter）：@yuuCraft1298</a></li>
+        <li><a href="https://discord.com" target="_blank" rel="noopener noreferrer">Discord：yuucraft にDM</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <p>© 2026 ゆーくらふと</p>
     </div>
-  </section>
-
-  <section id="contact" class="section">
-    <h2>📬 Contact</h2>
-    <p><a href="https://github.com/yuuCraft">Githubを見る：yuucraft</a></p>
-    <p><a href="https://twitter.com/@yuuCraft1298">Xで問い合わせ：yuucraft1298</a></p>
-    <p><a href="https://discord.com">Discordで問い合わせ：yuucraftにDM！</a></p>
-  </section>
-
-  <footer class="footer">
-    © 2026 ゆーくらふと
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
