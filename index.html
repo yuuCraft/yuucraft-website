@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portfolio</title>
+
+  <!-- フォント（例: Inter） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -18,7 +24,7 @@
   </div>
 </header>
 
-<main>
+<main class="container">
 
 <section class="section reveal">
   <h2>About</h2>
@@ -35,26 +41,26 @@
     <div class="card">
       <h3>Web Tools</h3>
       <p>検証・実用向けツール制作</p>
-      <button class="mini">→</button>
+      <button class="mini" aria-label="Web Tools 詳細">→</button>
     </div>
 
     <div class="card">
       <h3>Site Ops</h3>
       <p>GitHub Pages / Cloudflare</p>
-      <button class="mini">→</button>
+      <button class="mini" aria-label="Site Ops 詳細">→</button>
     </div>
 
     <div class="card">
       <h3>Experiments</h3>
       <p>仕様・挙動テスト</p>
-      <button class="mini">→</button>
+      <button class="mini" aria-label="Experiments 詳細">→</button>
     </div>
   </div>
 </section>
 
 <section id="links" class="section reveal">
   <h2>Links</h2>
-  <a href="https://github.com/" target="_blank">GitHub</a>
+  <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
 </section>
 
 </main>
