@@ -3,56 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio | ゆーくらふと</title>
+  <title>Portfolio</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <header class="hero">
   <h1 class="reveal">ゆーくらふと</h1>
-  <p class="reveal delay">Web / Tool / Creative</p>
+  <p class="reveal delay">Web tools & operations</p>
+
+  <div class="hero-buttons reveal delay2">
+    <a href="#operations" class="btn primary">Operations</a>
+    <a href="#links" class="btn ghost">Links</a>
+  </div>
 </header>
 
 <main>
-  <section class="section reveal">
-    <h2>About</h2>
-    <p>
-      Webツール制作・検証・運用が好き。<br>
-      HTML / CSS / JavaScript を中心に活動中。
-    </p>
-  </section>
 
-  <section class="section reveal">
-    <h2>Operations</h2>
-    <ul class="ops">
-      <li>Webツール開発</li>
-      <li>サイト運用・検証</li>
-      <li>GitHub Pages 活用</li>
-    </ul>
-  </section>
+<section class="section reveal">
+  <h2>About</h2>
+  <p>
+    Webツール制作・検証・運用。<br>
+    HTML / CSS / JavaScript を中心に活動。
+  </p>
+</section>
 
-  <section class="section reveal">
-    <h2>Stats</h2>
-    <div class="stats">
-      <div>
-        <span>10+</span>
-        <p>Projects</p>
-      </div>
-      <div>
-        <span>3+</span>
-        <p>Years</p>
-      </div>
-      <div>
-        <span>∞</span>
-        <p>Curiosity</p>
-      </div>
+<section id="operations" class="section reveal">
+  <h2>Operations</h2>
+
+  <div class="ops">
+    <div class="card">
+      <h3>Web Tools</h3>
+      <p>検証・実用向けツール制作</p>
+      <button class="mini">→</button>
     </div>
-  </section>
 
-  <section class="section reveal">
-    <h2>Links</h2>
-    <a href="https://github.com/" target="_blank">GitHub</a>
-  </section>
+    <div class="card">
+      <h3>Site Ops</h3>
+      <p>GitHub Pages / Cloudflare</p>
+      <button class="mini">→</button>
+    </div>
+
+    <div class="card">
+      <h3>Experiments</h3>
+      <p>仕様・挙動テスト</p>
+      <button class="mini">→</button>
+    </div>
+  </div>
+</section>
+
+<section id="links" class="section reveal">
+  <h2>Links</h2>
+  <a href="https://github.com/" target="_blank">GitHub</a>
+</section>
+
 </main>
 
 <footer>
