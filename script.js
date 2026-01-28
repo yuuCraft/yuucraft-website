@@ -1,42 +1,36 @@
-// script.js — 軽量なナビゲーション制御とスムーススクロール
-document.addEventListener('DOMContentLoaded', function () {
-  const toggle = document.querySelector('.nav-toggle');
-  const nav = document.getElementById('primary-navigation');
+// テーマ切替 & 簡易 contact form -> mailto 実装
+document.addEventListener('DOMContentLoaded', () => {
+  // 年を自動セット
+  const y = new Date().getFullYear();
+  document.getElementById('year').textContent = y;
 
-  if (toggle && nav) {
-    toggle.addEventListener('click', function () {
-      const expanded = this.getAttribute('aria-expanded') === 'true';
-      this.setAttribute('aria-expanded', String(!expanded));
-      nav.setAttribute('aria-hidden', String(expanded));
-      // 更新ボタンラベル（スクリーンリーダー用）
-      this.setAttribute('aria-label', expanded ? 'メニューを開く' : 'メニューを閉じる');
-    });
+  // テーマ切替
+  const toggle = document.getElementById('theme-toggle');
+  const current = localStorage.getItem('theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if(current === 'dark') document.body.classList.add('dark');
 
-    // メニュー外をクリックしたら閉じる（モバイル挙動向上）
-    document.addEventListener('click', (e) => {
-      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-        nav.setAttribute('aria-hidden', 'true');
-        toggle.setAttribute('aria-expanded', 'false');
-        toggle.setAttribute('aria-label', 'メニューを開く');
-      }
-    });
-  }
+  toggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark') ? 'dark' : 'light';
+    localStorage.setItem('theme', isDark);
+  });
 
-  // スムーススクロール（内部リンク）
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', (ev) => {
-      const href = a.getAttribute('href');
-      if (href === '#' || href === '') return;
-      const target = document.querySelector(href);
-      if (target) {
-        ev.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // モバイルならメニューを閉じる
-        if (nav && window.getComputedStyle(toggle).display !== 'none') {
-          nav.setAttribute('aria-hidden', 'true');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      }
-    });
+  // contact form を mailto で開く（受信先は未設定）
+  const form = document.getElementById('contact-form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const name = data.get('name') || '';
+    const email = data.get('email') || '';
+    const message = data.get('message') || '';
+    const subject = encodeURIComponent(`お問い合わせ from ${name}`);
+    const body = encodeURIComponent(`名前: ${name}\nメール: ${email}\n\n${message}`);
+    // 受信先メールアドレスが未指定の場合は recipient を空にして mailto を開く
+    // 受信先を指定したい場合は 'you@example.com' の部分を置き換えてください
+    const recipient = ''; // 例: 'you@example.com'
+    const mailto = recipient
+      ? `mailto:${recipient}?subject=${subject}&body=${body}`
+      : `mailto:?subject=${subject}&body=${body}`;
+    window.location.href = mailto;
   });
 });
