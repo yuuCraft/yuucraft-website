@@ -1,6 +1,10 @@
-// 名前をあとからJSで変えたい時用（デモ）
-const nameElement = document.getElementById("name");
-
-if (nameElement) {
-  console.log("Welcome to", nameElement.textContent);
-}
+// ナビのスクロールスムース
+document.querySelectorAll('.nav a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
