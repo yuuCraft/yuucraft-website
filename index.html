@@ -1,48 +1,63 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>自己紹介 | My Profile</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自己紹介 | yuuCraft</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header class="hero">
-    <h1 id="name">Your Name</h1>
-    <p class="tagline">Web / Tech / Creative</p>
+  <header class="header">
+    <nav class="nav">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#works">Works</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="hero">
+      <h1>ゆーくらふと</h1>
+      <p>Web Developer & Creative</p>
+    </div>
   </header>
 
-  <main class="container">
-    <section>
-      <h2>👋 About</h2>
-      <p>
-        こんにちは！Web制作やテック系が好きです。<br>
-        HTML / CSS / JavaScript を触ってます。
-      </p>
-    </section>
+  <section id="about" class="section">
+    <h2>👋 About Me</h2>
+    <p>こんにちは、Web制作とプロダクト運用が好きです。</p>
+  </section>
 
-    <section>
-      <h2>🛠 Skills</h2>
-      <ul class="skills">
-        <li>HTML</li>
-        <li>CSS</li>
-        <li>JavaScript</li>
-        <li>GitHub Pages</li>
-      </ul>
-    </section>
+  <section id="skills" class="section">
+    <h2>🛠 Skills</h2>
+    <ul>
+      <li>HTML / CSS</li>
+      <li>JavaScript</li>
+      <li>GitHub Pages</li>
+      <li>React（任意）</li>
+    </ul>
+  </section>
 
-    <section>
-      <h2>🔗 Links</h2>
-      <ul class="links">
-        <li><a href="https://github.com/" target="_blank">GitHub</a></li>
-        <li><a href="https://twitter.com/" target="_blank">X (Twitter)</a></li>
-      </ul>
-    </section>
-  </main>
+  <section id="works" class="section">
+    <h2>🖼 Works</h2>
+    <div class="work-cards">
+      <div class="card">
+        <h3>プロジェクト1</h3>
+        <p>説明</p>
+      </div>
+      <div class="card">
+        <h3>プロジェクト2</h3>
+        <p>説明</p>
+      </div>
+    </div>
+  </section>
 
-  <footer>
-    <p>© 2026 Your Name</p>
+  <section id="contact" class="section">
+    <h2>📬 Contact</h2>
+    <p><a href="https://github.com/">GitHub</a></p>
+    <p><a href="https://twitter.com/">Twitter</a></p>
+  </section>
+
+  <footer class="footer">
+    © 2026 ゆーくらふと
   </footer>
 
   <script src="script.js"></script>
