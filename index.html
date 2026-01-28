@@ -1,97 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#0f172a" />
-  <title>自己紹介 | yuuCraft</title>
-
-  <!-- フォント（必要なければ削除可） -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css">
+  <title>yuuCraft — 自己紹介</title>
+  <meta name="description" content="yuuCraft の自己紹介サイト。ここを短い紹介文に置き換えてください。" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header" role="banner">
-    <div class="container header-inner">
-      <a class="brand" href="#" aria-label="yuuCraft ホーム">
-        <span class="brand-title">ゆーくらふと</span>
-        <span class="brand-sub">Web Developer & Creator</span>
-      </a>
-
-      <button class="nav-toggle" aria-controls="primary-navigation" aria-expanded="false" aria-label="メニューを開く">
-        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-
-      <nav id="primary-navigation" class="primary-nav" role="navigation" aria-label="メインナビゲーション">
-        <ul>
-          <li><a href="#about">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#works">Works</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
+  <header class="site-header">
+    <nav class="nav">
+      <div class="brand">yuuCraft</div>
+      <button id="theme-toggle" aria-label="テーマ切替">🌙</button>
+    </nav>
   </header>
 
-  <main>
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="container hero-inner">
-        <h1 id="hero-title">ゆーくらふと</h1>
-        <p class="lead">Web制作とコミュニティ運営が好きなフロントエンド開発者です。</p>
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <img src="https://yuucraft-com.edgeone.app/4780fbad4e38a814d539e7be6e8cc7e5.png" alt="yuuCraft のプロフィール画像" class="avatar">
+      <h1 id="person-name">yuuCraft</h1>
+      <p class="lead">ここに短い自己紹介（1〜3行）を入れてください。例: フロントエンドエンジニア / 趣味でゲーム開発など</p>
+      <div class="links">
+        <a href="#contact" class="btn ghost">お問い合わせ</a>
+      </div>
+      <div class="social">
+        <!-- SNSリンクを差し替えてください -->
+        <a href="#" aria-label="GitHub">GitHub</a>
+        <a href="#" aria-label="Twitter">Twitter</a>
+        <a href="#" aria-label="LinkedIn">LinkedIn</a>
       </div>
     </section>
 
-    <section id="about" class="section container" aria-labelledby="about-title">
-      <h2 id="about-title">👋 About Me</h2>
-      <p>こんにちは！Web制作とDiscordが好きです。使いやすさとパフォーマンスを重視したフロントエンド開発を得意としています。</p>
+    <!-- About -->
+    <section id="about" class="card">
+      <h2>自己紹介</h2>
+      <p>ここに詳しい自己紹介を入れてください。職務経歴、興味のある技術、得意分野などを書きます。</p>
     </section>
 
-    <section id="skills" class="section container" aria-labelledby="skills-title">
-      <h2 id="skills-title">🛠 Skills</h2>
-      <ul class="skill-list">
+    <!-- Skills -->
+    <section id="skills" class="card">
+      <h2>スキル</h2>
+      <ul class="skills-list">
         <li>HTML / CSS / JavaScript</li>
-        <li>TypeScript</li>
-        <li>GitHub / Replit</li>
-        <li>Discord 管理・Bot</li>
+        <li>React / Vue / Svelte</li>
+        <li>Node.js / Express</li>
+        <li>デザイン（Figma）</li>
       </ul>
     </section>
 
-    <section id="works" class="section container" aria-labelledby="works-title">
-      <h2 id="works-title">🖼 Works</h2>
-      <div class="work-grid" aria-live="polite">
-        <article class="card" aria-labelledby="work1-title">
-          <h3 id="work1-title">MusicOS</h3>
-          <p>MP3などを直接管理できるWebファイルマネージャー。</p>
-        </article>
-
-        <article class="card" aria-labelledby="work2-title">
-          <h3 id="work2-title">《開発中》ゆーくらTools</h3>
-          <p>使いやすい無料のWebツール。段階的に機能を追加中です��</p>
+    <!-- Projects -->
+    <section id="projects" class="card">
+      <h2>プロジェクト</h2>
+      <div class="projects-grid">
+        <article class="project">
+          <h3>プロジェクト名</h3>
+          <p>短い説明。リンクやスクリーンショットを追加してください。</p>
+          <a href="#" class="link">詳細を見る</a>
         </article>
       </div>
     </section>
 
-    <section id="contact" class="section container" aria-labelledby="contact-title">
-      <h2 id="contact-title">📬 Contact</h2>
-      <ul class="contact-list">
-        <li><a href="https://github.com/yuuCraft" target="_blank" rel="noopener noreferrer">GitHub：yuucraft</a></li>
-        <li><a href="https://twitter.com/yuuCraft1298" target="_blank" rel="noopener noreferrer">X（旧Twitter）：@yuuCraft1298</a></li>
-        <li><a href="https://discord.com" target="_blank" rel="noopener noreferrer">Discord：yuucraft にDM</a></li>
-      </ul>
+    <!-- Contact -->
+    <section id="contact" class="card">
+      <h2>お問い合わせ</h2>
+      <p>以下のフォームからメール作成画面が開きます（受信先は未設定です）。受信先のメールアドレスを教えていただければ自動で設定します。</p>
+      <form id="contact-form">
+        <label>
+          お名前
+          <input type="text" name="name" required placeholder="例: 山田 太郎">
+        </label>
+        <label>
+          メール
+          <input type="email" name="email" required placeholder="your@example.com">
+        </label>
+        <label>
+          メッセージ
+          <textarea name="message" rows="5" required placeholder="メッセージを入力してください"></textarea>
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn">メールで送る</button>
+        </div>
+      </form>
     </section>
   </main>
 
-  <footer class="site-footer" role="contentinfo">
-    <div class="container">
-      <p>© 2026 ゆーくらふと</p>
-    </div>
+  <footer class="site-footer">
+    <small>© <span id="year"></span> yuuCraft</small>
   </footer>
 
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
