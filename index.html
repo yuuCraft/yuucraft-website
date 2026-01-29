@@ -3,34 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yuuCraft | Web & Bot Developer</title>
+  <title>yuuCraft</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<div class="container">
+<div class="wrapper">
 
-  <!-- ヘッダー -->
-  <div class="profile">
-    <img src="icon.png" alt="icon" class="icon" />
-    <h1>yuuCraft <span>/ ゆーくらふと</span></h1>
-    <p class="subtitle">Web & Bot Developer</p>
+  <!-- 上部プロフィールカード -->
+  <div class="profile-card">
+    <img src="icon.png" class="avatar" alt="icon">
 
-    <div class="socials">
-      <a href="#">𝕏</a>
-      <a href="#">Facebook</a>
-      <a href="#">Instagram</a>
-      <a href="#">YouTube</a>
-      <a href="#">GitHub</a>
-      <a href="#">Discord</a>
+    <div class="profile-info">
+      <h1>yuuCraft <span>/ ゆーくらふと</span></h1>
+      <p class="role">Web & Bot Developer</p>
+
+      <div class="socials">
+        <span>𝕏</span>
+        <span>f</span>
+        <span>📷</span>
+        <span>▶</span>
+        <span>🐙</span>
+        <span>💬</span>
+      </div>
     </div>
   </div>
 
-  <!-- カード群 -->
+  <!-- 下部 2x2 グリッド -->
   <div class="grid">
 
-    <div class="card">
-      <h2>💻 プログラミング知識</h2>
+    <div class="card blue">
+      <h2>プログラミング知識</h2>
       <ul>
         <li>HTML / CSS / JavaScript</li>
         <li>discord.py / discord.js</li>
@@ -39,30 +42,36 @@
       </ul>
     </div>
 
-    <div class="card">
-      <h2>🚀 活動実績</h2>
+    <div class="card blue">
+      <h2>活動実績</h2>
       <ul>
         <li>活動開始から3years+</li>
         <li>Discord運営 25+</li>
         <li>自鯖「Craft Studio」</li>
-        <li>140+ Projects</li>
+        <li>140+</li>
       </ul>
     </div>
 
     <div class="card discord">
-      <h2>💬 Discord</h2>
-      <p><strong>Craft Studio</strong></p>
-      <p>Always Online 50+</p>
-      <p>Total Member 140+</p>
-      <button onclick="joinDiscord()">Join NOW!!!</button>
+      <div class="discord-top">
+        <span class="discord-icon">💬</span>
+        <strong>Discord</strong>
+      </div>
+
+      <div class="discord-box">
+        <p class="server">Craft Studio</p>
+        <p class="stat">Always Online 50+</p>
+        <p class="stat">Total Member 140+</p>
+        <button onclick="joinDiscord()">Join NOW!!!</button>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>🔗 その他</h2>
+    <div class="card blue">
+      <h2>その他</h2>
       <ul>
-        <li><a href="https://tools.yuucraft.com">tools.yuucraft.com</a></li>
-        <li><a href="https://yuucraft.com">yuucraft.com</a></li>
-        <li><a href="https://history.yuucraft.com">history.yuucraft.com</a></li>
+        <li>tools.yuucraft.com</li>
+        <li>yuucraft.com</li>
+        <li>history.yuucraft.com</li>
         <li>ゆーCraftを詳しく解説</li>
       </ul>
     </div>
