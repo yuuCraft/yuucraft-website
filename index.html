@@ -3,71 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio</title>
-
-  <!-- フォント（例: Inter） -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+  <title>yuuCraft | Web & Bot Developer</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<header class="hero">
-  <h1 class="reveal">yuuCraft / ゆーくらふと</h1>
-  <p class="reveal delay">Web & Bot Deveroper & operations</p>
+<div class="container">
 
-  <div class="hero-buttons reveal delay2">
-    <a href="#operations" class="btn primary">Operations</a>
-    <a href="#links" class="btn ghost">Links</a>
-  </div>
-</header>
+  <!-- ヘッダー -->
+  <div class="profile">
+    <img src="icon.png" alt="icon" class="icon" />
+    <h1>yuuCraft <span>/ ゆーくらふと</span></h1>
+    <p class="subtitle">Web & Bot Developer</p>
 
-<main class="container">
-
-<section class="section reveal">
-  <h2>About</h2>
-  <p>
-    Webツール制作・検証・運用。<br>
-    HTML / CSS / JavaScript を中心に活動。
-  </p>
-</section>
-
-<section id="operations" class="section reveal">
-  <h2>Operations</h2>
-
-  <div class="ops">
-    <div class="card">
-      <h3>Web Tools</h3>
-      <p>検証・実用向けツール制作</p>
-      <button class="mini" aria-label="Web Tools 詳細">→</button>
-    </div>
-
-    <div class="card">
-      <h3>Site Ops</h3>
-      <p>GitHub Pages / Cloudflare</p>
-      <button class="mini" aria-label="Site Ops 詳細">→</button>
-    </div>
-
-    <div class="card">
-      <h3>Experiments</h3>
-      <p>仕様・挙動テスト</p>
-      <button class="mini" aria-label="Experiments 詳細">→</button>
+    <div class="socials">
+      <a href="#">𝕏</a>
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">YouTube</a>
+      <a href="#">GitHub</a>
+      <a href="#">Discord</a>
     </div>
   </div>
-</section>
 
-<section id="links" class="section reveal">
-  <h2>Links</h2>
-  <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-</section>
+  <!-- カード群 -->
+  <div class="grid">
 
-</main>
+    <div class="card">
+      <h2>💻 プログラミング知識</h2>
+      <ul>
+        <li>HTML / CSS / JavaScript</li>
+        <li>discord.py / discord.js</li>
+        <li>Node.js / Next.js</li>
+        <li>React</li>
+      </ul>
+    </div>
 
-<footer>
-  © 2026 yuucraft
-</footer>
+    <div class="card">
+      <h2>🚀 活動実績</h2>
+      <ul>
+        <li>活動開始から3years+</li>
+        <li>Discord運営 25+</li>
+        <li>自鯖「Craft Studio」</li>
+        <li>140+ Projects</li>
+      </ul>
+    </div>
+
+    <div class="card discord">
+      <h2>💬 Discord</h2>
+      <p><strong>Craft Studio</strong></p>
+      <p>Always Online 50+</p>
+      <p>Total Member 140+</p>
+      <button onclick="joinDiscord()">Join NOW!!!</button>
+    </div>
+
+    <div class="card">
+      <h2>🔗 その他</h2>
+      <ul>
+        <li><a href="https://tools.yuucraft.com">tools.yuucraft.com</a></li>
+        <li><a href="https://yuucraft.com">yuucraft.com</a></li>
+        <li><a href="https://history.yuucraft.com">history.yuucraft.com</a></li>
+        <li>ゆーCraftを詳しく解説</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
