@@ -1,91 +1,133 @@
+:root {
+  --bg: #f3f3f3;
+  --card: #e6f1ff;
+  --radius: 14px;
+  --text: #111;
+  --sub: #555;
+}
+
 * {
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+               "Hiragino Sans", "Noto Sans JP", sans-serif;
 }
 
 body {
-  background: #f2f2f2;
   margin: 0;
-  padding: 20px;
+  background: var(--bg);
+  padding: 24px;
+  color: var(--text);
 }
 
-.container {
-  max-width: 900px;
+.wrapper {
+  max-width: 880px;
   margin: auto;
 }
 
-.profile {
-  text-align: center;
-  margin-bottom: 30px;
+/* ===== プロフィール ===== */
+
+.profile-card {
+  background: #eee;
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 18px;
 }
 
-.icon {
-  width: 96px;
+.avatar {
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
 }
 
-.profile h1 {
-  margin: 10px 0 0;
+.profile-info h1 {
+  margin: 0;
+  font-size: 22px;
 }
 
-.profile span {
-  font-size: 0.8em;
-  color: #666;
+.profile-info span {
+  font-size: 14px;
+  color: var(--sub);
 }
 
-.subtitle {
-  color: #555;
+.role {
+  margin: 4px 0 8px;
+  color: var(--sub);
 }
 
-.socials {
-  margin-top: 10px;
-}
-
-.socials a {
-  margin: 0 6px;
-  text-decoration: none;
-  background: #e0e0e0;
-  padding: 6px 10px;
+.socials span {
+  background: #ddd;
   border-radius: 6px;
-  color: #000;
+  padding: 4px 8px;
+  margin-right: 6px;
+  font-size: 13px;
 }
+
+/* ===== グリッド ===== */
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
 }
 
 .card {
-  background: #d9ecff;
-  padding: 15px;
-  border-radius: 12px;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
 }
 
 .card h2 {
-  margin-top: 0;
+  margin: 0 0 8px;
+  font-size: 16px;
 }
 
 .card ul {
+  margin: 0;
   padding-left: 18px;
+  line-height: 1.6;
 }
 
-.card a {
-  color: #0066cc;
-  text-decoration: none;
-}
+/* ===== Discordカード ===== */
 
 .discord {
-  background: #e6e6ff;
+  background: #eef0ff;
+}
+
+.discord-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.discord-box {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
   text-align: center;
 }
 
+.server {
+  font-weight: 700;
+  margin: 0;
+}
+
+.stat {
+  font-size: 13px;
+  color: var(--sub);
+  margin: 2px 0;
+}
+
 .discord button {
-  margin-top: 10px;
-  padding: 8px 14px;
+  margin-top: 8px;
   border: none;
-  background: #5865f2;
-  color: white;
   border-radius: 8px;
+  padding: 6px 12px;
+  background: #5865f2;
+  color: #fff;
   cursor: pointer;
 }
