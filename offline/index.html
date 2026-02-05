@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>インターネットに接続されていません</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg: #0b0f14;
+  --panel: #0f1620;
+  --neon: #00eaff;
+  --text: #e6f1ff;
+  --sub: #8fa3b8;
+  --border: rgba(0,234,255,0.35);
+  --glow: 0 0 12px rgba(0,234,255,0.35);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top, #0e1625 0%, var(--bg) 60%);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box {
+  width: 100%;
+  max-width: 520px;
+  padding: 28px;
+  background: linear-gradient(180deg, #0f1620, #0b111a);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--glow);
+}
+
+.icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 8px rgba(0,234,255,.4));
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0 0 12px;
+}
+
+p {
+  font-size: 14px;
+  color: var(--sub);
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+
+ul {
+  margin: 0 0 18px 18px;
+  padding: 0;
+  font-size: 14px;
+  color: var(--sub);
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+.error {
+  font-size: 12px;
+  color: var(--sub);
+  letter-spacing: .04em;
+}
+
+.buttons {
+  margin-top: 22px;
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--neon);
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 rgba(0,0,0,0);
+}
+
+button:hover {
+  box-shadow: 0 0 12px rgba(0,234,255,.4);
+}
+
+.online {
+  color: #6bffb8;
+  text-shadow: 0 0 8px rgba(107,255,184,.4);
+}
+</style>
+</head>
+
+<body>
+<div class="box" id="screen">
+  <div class="icon">📡</div>
+  <h1>インターネットに接続されていません</h1>
+  <p>
+    ネットワークに接続できませんでした。<br>
+    接続状態を確認してください。
+  </p>
+
+  <ul>
+    <li>Wi-Fi またはモバイル通信がオンか確認</li>
+    <li>機内モードがオフか確認</li>
+    <li>ネットワークが利用可能か確認</li>
+  </ul>
+
+  <div class="error">ERR_INTERNET_DISCONNECTED</div>
+
+  <div class="buttons">
+    <button onclick="location.reload()">再読み込み</button>
+    <button onclick="location.href='/'">トップへ</button>
+  </div>
+</div>
+
+<script>
+function showOnline() {
+  document.getElementById("screen").innerHTML = `
+    <div class="icon online">✔</div>
+    <h1 class="online">接続が復帰しました</h1>
+    <p>再読み込みするとページを表示できます。</p>
+    <button onclick="location.reload()">再読み込み</button>
+  `;
+}
+
+if (navigator.onLine) {
+  showOnline();
+}
+
+window.addEventListener("online", showOnline);
+</script>
+</body>
+</html>
