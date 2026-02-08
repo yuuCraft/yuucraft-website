@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Yuucraft YouTube Library</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#fff;
+  color:#0f0f0f;
+}
+
+/* Header */
+header{
+  position:sticky;
+  top:0;
+  background:#fff;
+  border-bottom:1px solid #eee;
+  padding:12px 16px;
+  z-index:100;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+h1{
+  margin:0;
+  font-size:20px;
+  color:#ff0000;
+}
+
+/* Player */
+#playerContainer{
+  display:none;
+  padding:16px;
+  border-bottom:1px solid #eee;
+}
+
+#player{
+  width:100%;
+  height:360px;
+  border:none;
+  border-radius:12px;
+}
+
+/* Controls */
+.controls{
+  padding:16px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  border-bottom:1px solid #eee;
+}
+
+input, select{
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:8px;
+}
+
+button{
+  background:#ff0000;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+button:hover{opacity:0.9}
+
+/* Playlist tabs */
+#playlistTabs{
+  display:flex;
+  gap:8px;
+  padding:10px 16px;
+  border-bottom:1px solid #eee;
+  flex-wrap:wrap;
+}
+
+.tab{
+  padding:6px 12px;
+  border-radius:20px;
+  background:#f2f2f2;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.tab.active{
+  background:#0f0f0f;
+  color:#fff;
+}
+
+/* Grid */
+#videoGrid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+  gap:16px;
+  padding:16px;
+}
+
+.card{
+  cursor:pointer;
+  transition:transform 0.15s;
+}
+
+.card:hover{
+  transform:scale(1.02);
+}
+
+.thumb{
+  width:100%;
+  border-radius:12px;
+}
+
+.title{
+  font-size:14px;
+  margin-top:6px;
+  font-weight:bold;
+}
+
+.meta{
+  font-size:12px;
+  color:#666;
+}
+
+.deleteBtn{
+  margin-top:4px;
+  background:#eee;
+  color:#333;
+  font-size:12px;
+  padding:4px 8px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Yuucraft Library</h1>
+</header>
+
+<div id="playerContainer">
+  <iframe id="player" allowfullscreen></iframe>
+</div>
+
+<div class="controls">
+  <input id="urlInput" placeholder="YouTube URL">
+  <input id="playlistInput" placeholder="プレイリスト">
+  <input id="searchInput" placeholder="検索" oninput="render()">
+  <select id="sortSelect" onchange="render()">
+    <option value="new">新しい順</option>
+    <option value="old">古い順</option>
+  </select>
+  <button onclick="addVideo()">追加</button>
+</div>
+
+<div id="playlistTabs"></div>
+<div id="videoGrid"></div>
+
+<script>
+const KEY = "yuucraft_youtube_v2";
+let currentFilter = "すべて";
+
+function loadData(){
+  return JSON.parse(localStorage.getItem(KEY)) || {videos:[]};
+}
+
+function saveData(data){
+  localStorage.setItem(KEY, JSON.stringify(data));
+}
+
+function extractId(url){
+  const reg = /(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/;
+  const m = url.match(reg);
+  return m ? m[1] : null;
+}
+
+async function fetchTitle(url){
+  try{
+    const res = await fetch("https://www.youtube.com/oembed?url=" + encodeURIComponent(url) + "&format=json");
+    const data = await res.json();
+    return data.title;
+  }catch{
+    return "タイトル取得失敗";
+  }
+}
+
+async function addVideo(){
+  const url = document.getElementById("urlInput").value.trim();
+  const playlist = document.getElementById("playlistInput").value.trim() || "未分類";
+  const id = extractId(url);
+
+  if(!id){
+    alert("URLが正しくありません");
+    return;
+  }
+
+  const data = loadData();
+
+  if(data.videos.some(v=>v.id===id)){
+    alert("既に追加されています");
+    return;
+  }
+
+  const title = await fetchTitle(url);
+
+  data.videos.push({
+    id,
+    title,
+    playlist,
+    date: Date.now()
+  });
+
+  saveData(data);
+  render();
+}
+
+function deleteVideo(index){
+  const data = loadData();
+  data.videos.splice(index,1);
+  saveData(data);
+  render();
+}
+
+function playVideo(id){
+  document.getElementById("playerContainer").style.display="block";
+  document.getElementById("player").src = "https://www.youtube.com/embed/" + id;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderTabs(playlists){
+  const tabs = document.getElementById("playlistTabs");
+  tabs.innerHTML="";
+
+  const all = document.createElement("div");
+  all.textContent="すべて";
+  all.className="tab" + (currentFilter==="すべて"?" active":"");
+  all.onclick=()=>{currentFilter="すべて"; render();};
+  tabs.appendChild(all);
+
+  playlists.forEach(p=>{
+    const tab = document.createElement("div");
+    tab.textContent=p;
+    tab.className="tab" + (currentFilter===p?" active":"");
+    tab.onclick=()=>{currentFilter=p; render();};
+    tabs.appendChild(tab);
+  });
+}
+
+function render(){
+  const grid = document.getElementById("videoGrid");
+  grid.innerHTML="";
+
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const sort = document.getElementById("sortSelect").value;
+
+  const data = loadData();
+
+  let videos = [...data.videos];
+
+  if(sort==="new") videos.sort((a,b)=>b.date-a.date);
+  if(sort==="old") videos.sort((a,b)=>a.date-b.date);
+
+  const playlists = [...new Set(videos.map(v=>v.playlist))];
+  renderTabs(playlists);
+
+  videos.forEach((v,index)=>{
+    if(currentFilter!=="すべて" && v.playlist!==currentFilter) return;
+    if(search && !v.title.toLowerCase().includes(search)) return;
+
+    const card = document.createElement("div");
+    card.className="card";
+
+    card.innerHTML = `
+      <img class="thumb" src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg">
+      <div class="title">${v.title}</div>
+      <div class="meta">${v.playlist}</div>
+      <button class="deleteBtn">削除</button>
+    `;
+
+    card.onclick=()=>playVideo(v.id);
+    card.querySelector(".deleteBtn").onclick=(e)=>{
+      e.stopPropagation();
+      deleteVideo(index);
+    };
+
+    grid.appendChild(card);
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
