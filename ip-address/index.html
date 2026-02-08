@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>自分のIP確認</title>
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0a0a0a;
+    color: #00ffff;
+    font-family: monospace;
+    text-align: center;
+}
+.box {
+    border: 2px solid #00ffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #00ffff44;
+}
+.ip {
+    font-size: 28px;
+    margin-top: 10px;
+}
+.note {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 15px;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>あなたのIPアドレス</h2>
+    <div class="ip" id="ip">取得中...</div>
+    <div class="note">※ 外部サービスを使用しています</div>
+</div>
+
+<script>
+fetch("https://api.ipify.org?format=json")
+.then(response => response.json())
+.then(data => {
+    document.getElementById("ip").textContent = data.ip;
+})
+.catch(() => {
+    document.getElementById("ip").textContent = "取得できませんでした";
+});
+</script>
+
+</body>
+</html>
