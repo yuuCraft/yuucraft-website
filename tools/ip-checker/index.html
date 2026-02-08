@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>IPセキュリティチェック</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: #050505;
+    color: #00ffcc;
+    font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    border: 2px solid #00ffcc;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 25px #00ffcc33;
+    width: 340px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.item {
+    margin: 6px 0;
+}
+
+.safe { color: #00ff88; }
+.warn { color: #ffaa00; }
+.danger { color: #ff4444; }
+
+.note {
+    font-size: 11px;
+    color: #888;
+    margin-top: 10px;
+    text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>IP セキュリティチェック</h2>
+
+    <div class="item">IP: <span id="ip">取得中...</span></div>
+    <div class="item">VPN: <span id="vpn">-</span></div>
+    <div class="item">Proxy: <span id="proxy">-</span></div>
+    <div class="item">Tor: <span id="tor">-</span></div>
+    <div class="item">Hosting(サーバー回線): <span id="hosting">-</span></div>
+
+    <div class="note">
+        ※ 回線の性質チェックです（個人特定ではありません）
+    </div>
+</div>
+
+<script>
+fetch("https://api.ipapi.is/")
+.then(res => res.json())
+.then(data => {
+    document.getElementById("ip").textContent = data.ip;
+
+    function setStatus(id, value) {
+        const el = document.getElementById(id);
+        if (value === true) {
+            el.textContent = "検出";
+            el.className = "danger";
+        } else {
+            el.textContent = "なし";
+            el.className = "safe";
+        }
+    }
+
+    setStatus("vpn", data.is_vpn);
+    setStatus("proxy", data.is_proxy);
+    setStatus("tor", data.is_tor);
+    setStatus("hosting", data.is_datacenter);
+})
+.catch(() => {
+    document.querySelector(".box").innerHTML = "取得に失敗しました";
+});
+</script>
+
+</body>
+</html>
