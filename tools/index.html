@@ -1,12 +1,257 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>zzz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yuucraft Web Tools</title>
+
+<style>
+body{
+    margin:0;
+    font-family:system-ui,-apple-system,sans-serif;
+    background:#0b0f17;
+    color:#e6edf3;
+}
+
+/* ===== 上部ナビ ===== */
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 25px;
+    border-bottom:1px solid #1f2937;
+    background:#0b0f17;
+    position:sticky;
+    top:0;
+}
+
+.logo{
+    font-size:1.4em;
+    color:#00eaff;
+    text-shadow:0 0 8px #00eaff88;
+    font-weight:bold;
+}
+
+.menu a{
+    color:#94a3b8;
+    text-decoration:none;
+    margin-left:20px;
+}
+.menu a:hover{
+    color:#00eaff;
+}
+
+/* ===== メイン ===== */
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:25px;
+}
+
+/* 検索 */
+.search-box{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #1f2937;
+    background:#111827;
+    color:white;
+    margin-bottom:15px;
+}
+
+/* カテゴリ */
+.categories{
+    margin-bottom:20px;
+}
+.cat-btn{
+    padding:6px 12px;
+    margin:4px;
+    border-radius:20px;
+    border:1px solid #1f2937;
+    background:#111827;
+    color:#94a3b8;
+    cursor:pointer;
+}
+.cat-btn.active,
+.cat-btn:hover{
+    color:#00eaff;
+    border-color:#00eaff;
+}
+
+/* グリッド */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:18px;
+}
+
+/* カード */
+.card{
+    background:#111827;
+    border:1px solid #1f2937;
+    border-radius:14px;
+    padding:18px;
+    transition:0.2s;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+.card:hover{
+    transform:translateY(-4px);
+    border-color:#00eaff;
+    box-shadow:0 0 15px #00eaff22;
+}
+
+.icon{
+    font-size:26px;
+}
+
+.card h3{
+    margin:8px 0 5px;
+}
+
+.card p{
+    font-size:0.9em;
+    color:#94a3b8;
+}
+
+/* ボタン */
+.open-btn{
+    margin-top:12px;
+    padding:8px;
+    border-radius:8px;
+    border:none;
+    background:#00eaff;
+    color:#001018;
+    font-weight:bold;
+    cursor:pointer;
+}
+.open-btn:hover{
+    box-shadow:0 0 10px #00eaff88;
+}
+
+/* フッター */
+footer{
+    text-align:center;
+    padding:30px;
+    color:#64748b;
+    border-top:1px solid #1f2937;
+    margin-top:40px;
+}
+</style>
 </head>
 <body>
-  <h1>/zzz のページ</h1>
-  <p>ここは https://xxx.com/zzz/ です</p>
-  <p><a href="/">トップへ</a></p>
+
+<nav>
+    <div class="logo">Yuucraft Tools</div>
+    <div class="menu">
+        <a href="/">Home</a>
+        <a href="/ip-address/">IP</a>
+    </div>
+</nav>
+
+<div class="container">
+
+<input type="text" id="search" class="search-box" placeholder="ツール検索...">
+
+<div class="categories" id="categories"></div>
+
+<div class="grid" id="toolGrid"></div>
+
+</div>
+
+<footer>
+© 2026 Yuucraft
+</footer>
+
+<script>
+/* ===== ツール一覧（ここに追加するだけ） ===== */
+const tools = [
+    {
+        name: "IP Address",
+        desc: "現在のIPアドレスを表示",
+        url: "/ip-address/",
+        category: "Network",
+        icon: "🌐"
+    },
+    {
+        name: "IP Address+",
+        desc: "IPの詳細情報を表示",
+        url: "/ip-address+/",
+        category: "Network",
+        icon: "⚡"
+    },
+    {
+        name: "IP Checker",
+        desc: "指定したIPの情報を検索",
+        url: "/ip-checker/",
+        category: "Network",
+        icon: "🔍"
+    }
+];
+
+const categoriesDiv = document.getElementById("categories");
+const grid = document.getElementById("toolGrid");
+const search = document.getElementById("search");
+
+let currentCategory = "All";
+
+/* カテゴリ生成 */
+function getCategories(){
+    const cats = ["All"];
+    tools.forEach(t=>{
+        if(!cats.includes(t.category)) cats.push(t.category);
+    });
+    return cats;
+}
+
+function renderCategories(){
+    categoriesDiv.innerHTML = "";
+    getCategories().forEach(cat=>{
+        const btn = document.createElement("button");
+        btn.textContent = cat;
+        btn.className = "cat-btn" + (cat===currentCategory?" active":"");
+        btn.onclick = ()=>{
+            currentCategory = cat;
+            renderCategories();
+            renderTools();
+        };
+        categoriesDiv.appendChild(btn);
+    });
+}
+
+/* ツール表示 */
+function renderTools(){
+    const keyword = search.value.toLowerCase();
+    grid.innerHTML = "";
+
+    tools.forEach(tool=>{
+        if(currentCategory !== "All" && tool.category !== currentCategory) return;
+        if(!tool.name.toLowerCase().includes(keyword) &&
+           !tool.desc.toLowerCase().includes(keyword)) return;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <div>
+                <div class="icon">${tool.icon}</div>
+                <h3>${tool.name}</h3>
+                <p>${tool.desc}</p>
+                <small style="color:#00eaff">${tool.category}</small>
+            </div>
+            <button class="open-btn" onclick="location.href='${tool.url}'">開く</button>
+        `;
+
+        grid.appendChild(card);
+    });
+}
+
+search.addEventListener("input", renderTools);
+
+renderCategories();
+renderTools();
+</script>
+
 </body>
 </html>
