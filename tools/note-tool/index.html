@@ -2,107 +2,172 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>Note記事整形ツール</title>
+<title>Note整形ツール</title>
+
 <style>
+:root{
+    --bg:#f5f7fa;
+    --card:#ffffff;
+    --text:#202124;
+    --border:#e0e0e0;
+    --accent:#1a73e8;
+}
+
+body.dark{
+    --bg:#202124;
+    --card:#2d2f31;
+    --text:#e8eaed;
+    --border:#3c4043;
+    --accent:#8ab4f8;
+}
+
 body{
     margin:0;
-    font-family: "Hiragino Sans","Noto Sans JP",sans-serif;
-    background:#111;
-    color:#eee;
+    font-family: "Google Sans", "Noto Sans JP", sans-serif;
+    background:var(--bg);
+    color:var(--text);
 }
 
+/* ヘッダー */
 header{
-    background:#1a1a1a;
-    padding:15px;
-    font-size:20px;
-    font-weight:bold;
-    text-align:center;
-    border-bottom:1px solid #333;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 20px;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+    box-shadow:0 2px 4px rgba(0,0,0,0.05);
 }
 
+.title{
+    font-size:18px;
+    font-weight:600;
+}
+
+/* トグル */
+.switch{
+    cursor:pointer;
+    padding:6px 14px;
+    border-radius:20px;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+}
+
+/* レイアウト */
 .container{
     display:flex;
-    height:calc(100vh - 60px);
-}
-
-.editor, .preview{
-    width:50%;
-    padding:15px;
+    gap:16px;
+    padding:16px;
+    height:calc(100vh - 70px);
     box-sizing:border-box;
 }
 
-textarea{
-    width:100%;
-    height:100%;
-    background:#0d0d0d;
-    color:#fff;
-    border:1px solid #333;
-    resize:none;
-    font-size:15px;
-    line-height:1.6;
-    padding:10px;
+/* カード */
+.card{
+    background:var(--card);
+    border-radius:16px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+    border:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+}
+
+/* エディタ */
+.editor{
+    width:50%;
 }
 
 .preview{
-    background:#181818;
+    width:50%;
+    padding:16px;
     overflow:auto;
 }
 
-.toolbar{
-    padding:10px;
-    background:#1a1a1a;
-    border-bottom:1px solid #333;
+textarea{
+    flex:1;
+    border:none;
+    outline:none;
+    resize:none;
+    font-size:15px;
+    line-height:1.7;
+    padding:16px;
+    background:transparent;
+    color:var(--text);
 }
 
-button{
-    margin:3px;
-    padding:6px 10px;
-    background:#222;
-    color:#fff;
-    border:1px solid #444;
+/* ツールバー */
+.toolbar{
+    padding:10px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+button.tool{
+    border:none;
+    padding:6px 12px;
+    border-radius:18px;
+    background:var(--bg);
     cursor:pointer;
 }
 
-button:hover{
-    background:#333;
+button.tool:hover{
+    background:var(--border);
 }
 
-.copy-btn{
-    background:#00c853;
-    border:none;
+.copy{
+    margin-left:auto;
+    background:var(--accent);
+    color:#fff;
+}
+
+/* プレビュー内 */
+.preview h2{
+    border-bottom:2px solid var(--accent);
+    padding-bottom:4px;
+}
+
+.preview blockquote{
+    border-left:4px solid var(--accent);
+    padding-left:10px;
+    opacity:0.8;
+}
+
+.preview li{
+    margin-left:20px;
 }
 </style>
 </head>
 <body>
 
-<header>Note記事整形ツール（コピペ用）</header>
-
-<div class="toolbar">
-    <button onclick="insert('## 見出し\n')">H2</button>
-    <button onclick="insert('### 小見出し\n')">H3</button>
-    <button onclick="insert('**太字**')">太字</button>
-    <button onclick="insert('> 引用\n')">引用</button>
-    <button onclick="insert('- 箇条書き\n')">リスト</button>
-    <button onclick="insert('---\n')">区切り線</button>
-    <button onclick="insert('```\nコード\n```\n')">コード</button>
-    <button class="copy-btn" onclick="copyText()">全部コピー</button>
-</div>
+<header>
+    <div class="title">Note整形ツール</div>
+    <button class="switch" onclick="toggleTheme()">ライト / ダーク</button>
+</header>
 
 <div class="container">
-    <div class="editor">
-        <textarea id="editor" placeholder="ここに記事を書くと、整形してNoteに貼れます。
 
-例：
-## 見出し
-本文
+    <!-- エディタ -->
+    <div class="card editor">
+        <div class="toolbar">
+            <button class="tool" onclick="insert('## 見出し\n')">H2</button>
+            <button class="tool" onclick="insert('### 小見出し\n')">H3</button>
+            <button class="tool" onclick="insert('**太字**')">太字</button>
+            <button class="tool" onclick="insert('> 引用\n')">引用</button>
+            <button class="tool" onclick="insert('- リスト\n')">リスト</button>
+            <button class="tool" onclick="insert('---\n')">区切り</button>
+            <button class="tool" onclick="insert('```\nコード\n```\n')">コード</button>
+            <button class="tool copy" onclick="copyText()">コピー</button>
+        </div>
 
-### 小見出し
-- リスト
-- リスト
-"></textarea>
+        <textarea id="editor" placeholder="ここに書く → コピー → Noteに貼る"></textarea>
     </div>
 
-    <div class="preview" id="preview"></div>
+    <!-- プレビュー -->
+    <div class="card preview" id="preview"></div>
+
 </div>
 
 <script>
@@ -120,15 +185,17 @@ function insert(text){
 }
 
 function copyText(){
-    editor.select();
-    document.execCommand("copy");
-    alert("コピーしました！Noteに貼り付けてください");
+    navigator.clipboard.writeText(editor.value);
+    alert("コピーしました！");
+}
+
+function toggleTheme(){
+    document.body.classList.toggle("dark");
 }
 
 function updatePreview(){
     let text = editor.value;
 
-    // 簡易Markdown変換
     text = text
         .replace(/^### (.*$)/gim, "<h3>$1</h3>")
         .replace(/^## (.*$)/gim, "<h2>$1</h2>")
