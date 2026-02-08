@@ -1,37 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Tools</title>
+
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:#0a0a0a;
+  color:#fff;
+}
+
+header{
+  padding:20px;
+  font-size:24px;
+  text-align:center;
+  border-bottom:1px solid #222;
+}
+
+.container{
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:15px;
+}
+
+.card{
+  background:#111;
+  border:1px solid #222;
+  border-radius:12px;
+  padding:15px;
+  transition:0.2s;
+  cursor:pointer;
+}
+
+.card:hover{
+  border-color:#0ff;
+  box-shadow:0 0 10px #0ff3;
+}
+
+.icon{
+  font-size:28px;
+}
+
+.name{
+  font-size:18px;
+  margin-top:5px;
+}
+
+.desc{
+  font-size:13px;
+  color:#aaa;
+  margin-top:5px;
+}
+
+.category{
+  font-size:11px;
+  color:#0ff;
+  margin-top:8px;
+}
+</style>
+</head>
+<body>
+
+<header>Tools</header>
+
+<div class="container" id="toolList"></div>
+
 <script>
-/* ===== 設定 ===== */
-const BASE_PATH = "/tools/";
-const NEW_DAYS = 7; // 何日以内をNEWにする
-
-/* ===== ツール定義 ===== */
+// =========================
+// ここだけ編集すればOK
+// =========================
 const tools = [
-{
-    name: "IP Address",
-    desc: "現在のIPアドレスを表示",
-    path: "ip-address",
-    category: "Network",
-    icon: "🌐",
-    added: "2026-02-07"
-},
-{
-    name: "IP Address+",
-    desc: "IPの詳細情報を表示",
-    path: "ip-address+",
-    category: "Network",
-    icon: "⚡",
-    added: "2026-02-07"
-},
-{
-    name: "IP Checker",
-    desc: "IPを検索",
-    path: "ip-checker",
-    category: "Network",
-    icon: "🔍",
-    added: "2026-02-07"
-},
 
-/* 外部リンク例 */
-{
+  {
     name: "外部ツール",
     desc: "外部サイト",
     url: "https://example.com",
@@ -39,137 +82,57 @@ const tools = [
     category: "External",
     icon: "🌍",
     added: "2026-02-08"
-}
+  },
+
+  {
+    name: "Speed Test",
+    desc: "通信速度テスト",
+    url: "/speed/",
+    external: false,
+    category: "Network",
+    icon: "⚡",
+    added: "2026-02-08"
+  },
+
+  {
+    name: "Typing",
+    desc: "タイピング練習",
+    url: "/typing/",
+    external: false,
+    category: "Game",
+    icon: "⌨️",
+    added: "2026-02-08"
+  }
+
 ];
+// =========================
 
-/* ===== 使用回数 ===== */
-function getUsage(){
-    return JSON.parse(localStorage.getItem("tool_usage") || "{}");
-}
 
-function addUsage(name){
-    const usage = getUsage();
-    usage[name] = (usage[name] || 0) + 1;
-    localStorage.setItem("tool_usage", JSON.stringify(usage));
-}
+// 描画処理（触らなくてOK）
+const container = document.getElementById("toolList");
 
-/* ===== URL生成 ===== */
-function getToolUrl(tool){
-    if(tool.external) return tool.url;
-    return BASE_PATH + tool.path + "/";
-}
+tools.forEach(tool => {
+  const card = document.createElement("div");
+  card.className = "card";
 
-/* ===== NEW判定 ===== */
-function isNew(dateStr){
-    if(!dateStr) return false;
-    const added = new Date(dateStr);
-    const now = new Date();
-    const diff = (now - added) / (1000*60*60*24);
-    return diff <= NEW_DAYS;
-}
+  card.innerHTML = `
+    <div class="icon">${tool.icon}</div>
+    <div class="name">${tool.name}</div>
+    <div class="desc">${tool.desc}</div>
+    <div class="category">${tool.category}</div>
+  `;
 
-/* ===== 表示 ===== */
-const grid = document.getElementById("toolGrid");
-const search = document.getElementById("search");
-const categoriesDiv = document.getElementById("categories");
-
-let currentCategory = "All";
-
-function getCategories(){
-    const cats = ["All"];
-    tools.forEach(t=>{
-        if(!cats.includes(t.category)) cats.push(t.category);
-    });
-    return cats;
-}
-
-function renderCategories(){
-    categoriesDiv.innerHTML = "";
-    getCategories().forEach(cat=>{
-        const btn = document.createElement("button");
-        btn.textContent = cat;
-        btn.className = "cat-btn" + (cat===currentCategory?" active":"");
-        btn.onclick = ()=>{
-            currentCategory = cat;
-            renderCategories();
-            renderTools();
-        };
-        categoriesDiv.appendChild(btn);
-    });
-}
-
-function renderTools(){
-    const keyword = search.value.toLowerCase();
-    const usage = getUsage();
-    grid.innerHTML = "";
-
-    tools.forEach(tool=>{
-        if(currentCategory !== "All" && tool.category !== currentCategory) return;
-        if(!tool.name.toLowerCase().includes(keyword) &&
-           !tool.desc.toLowerCase().includes(keyword)) return;
-
-        const url = getToolUrl(tool);
-        const count = usage[tool.name] || 0;
-        const newLabel = isNew(tool.added) ? `<span style="color:red;font-size:12px;margin-left:6px;">NEW</span>` : "";
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        card.innerHTML = `
-            <div>
-                <div class="icon">${tool.icon}</div>
-                <h3>${tool.name} ${newLabel}</h3>
-                <p>${tool.desc}</p>
-                <small style="color:var(--accent)">${tool.category}</small><br>
-                <small>使用回数: ${count}</small>
-            </div>
-            <button class="open-btn">使用</button>
-        `;
-
-        card.querySelector("button").onclick = ()=>{
-            addUsage(tool.name);
-            location.href = url;
-        };
-
-        grid.appendChild(card);
-    });
-
-    renderRanking();
-}
-
-search.addEventListener("input", renderTools);
-
-/* ===== 人気ランキング ===== */
-function renderRanking(){
-    let rankingDiv = document.getElementById("ranking");
-
-    if(!rankingDiv){
-        rankingDiv = document.createElement("div");
-        rankingDiv.id = "ranking";
-        rankingDiv.style.marginTop = "40px";
-        grid.parentNode.appendChild(rankingDiv);
+  card.onclick = () => {
+    if(tool.external){
+      window.open(tool.url, "_blank");
+    }else{
+      location.href = tool.url;
     }
+  };
 
-    const usage = getUsage();
-
-    const sorted = [...tools].sort((a,b)=>{
-        return (usage[b.name]||0) - (usage[a.name]||0);
-    }).slice(0,5);
-
-    rankingDiv.innerHTML = "<h2>人気ツール</h2>";
-
-    sorted.forEach((tool,i)=>{
-        const url = getToolUrl(tool);
-        const count = usage[tool.name] || 0;
-
-        const item = document.createElement("div");
-        item.style.margin = "6px 0";
-        item.innerHTML = `${i+1}. <a href="${url}">${tool.name}</a> (${count})`;
-        rankingDiv.appendChild(item);
-    });
-}
-
-/* ===== 初期表示 ===== */
-renderCategories();
-renderTools();
+  container.appendChild(card);
+});
 </script>
+
+</body>
+</html>
