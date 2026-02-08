@@ -2,136 +2,218 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>Tools</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Toolbox</title>
 
 <style>
-body{
-  margin:0;
-  font-family:sans-serif;
-  background:#0a0a0a;
-  color:#fff;
+:root {
+  --bg: #0f1115;
+  --card: #1a1d24;
+  --text: #ffffff;
+  --accent: #4da3ff;
 }
 
-header{
-  padding:20px;
-  font-size:24px;
-  text-align:center;
-  border-bottom:1px solid #222;
+.light {
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #111;
 }
 
-.container{
-  padding:20px;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:15px;
+/* カラーテーマ */
+.theme-blue { --accent: #4da3ff; }
+.theme-green { --accent: #4caf50; }
+.theme-purple { --accent: #a855f7; }
+.theme-orange { --accent: #ff9800; }
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: 0.3s;
 }
 
-.card{
-  background:#111;
-  border:1px solid #222;
-  border-radius:12px;
-  padding:15px;
-  transition:0.2s;
-  cursor:pointer;
+header {
+  padding: 16px;
+  background: var(--card);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
 }
 
-.card:hover{
-  border-color:#0ff;
-  box-shadow:0 0 10px #0ff3;
+h1 {
+  margin: 0;
+  font-size: 20px;
 }
 
-.icon{
-  font-size:28px;
+.controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.name{
-  font-size:18px;
-  margin-top:5px;
+input, select, button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
 }
 
-.desc{
-  font-size:13px;
-  color:#aaa;
-  margin-top:5px;
+button {
+  cursor: pointer;
+  background: var(--accent);
+  color: white;
 }
 
-.category{
-  font-size:11px;
-  color:#0ff;
-  margin-top:8px;
+main {
+  padding: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--card);
+  padding: 14px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.card h3 {
+  margin: 0 0 6px 0;
+}
+
+.category {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.open-btn {
+  width: 100%;
 }
 </style>
 </head>
 <body>
 
-<header>Tools</header>
+<header>
+  <h1>My Toolbox</h1>
 
-<div class="container" id="toolList"></div>
+  <div class="controls">
+    <input id="search" placeholder="検索">
+    <select id="categoryFilter"></select>
+
+    <button onclick="toggleMode()">🌙/☀</button>
+
+    <select id="themeSelect" onchange="changeTheme(this.value)">
+      <option value="theme-blue">Blue</option>
+      <option value="theme-green">Green</option>
+      <option value="theme-purple">Purple</option>
+      <option value="theme-orange">Orange</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <div class="grid" id="toolGrid"></div>
+</main>
 
 <script>
-// =========================
-// ここだけ編集すればOK
-// =========================
+/* =========================
+   ▼ここを編集すればOK
+========================= */
 const tools = [
-
-  {
-    name: "外部ツール",
-    desc: "外部サイト",
-    url: "https://example.com",
-    external: true,
-    category: "External",
-    icon: "🌍",
-    added: "2026-02-08"
-  },
-
-  {
-    name: "Speed Test",
-    desc: "通信速度テスト",
-    url: "/speed/",
-    external: false,
-    category: "Network",
-    icon: "⚡",
-    added: "2026-02-08"
-  },
-
-  {
-    name: "Typing",
-    desc: "タイピング練習",
-    url: "/typing/",
-    external: false,
-    category: "Game",
-    icon: "⌨️",
-    added: "2026-02-08"
-  }
-
+  { name: "JSON Formatter", url: "https://jsonformatter.org", category: "開発" },
+  { name: "Base64 Encode/Decode", url: "https://www.base64encode.org", category: "開発" },
+  { name: "Image Compressor", url: "https://tinypng.com", category: "画像" },
+  { name: "Color Picker", url: "https://imagecolorpicker.com", category: "デザイン" },
+  { name: "Speed Test", url: "https://www.speedtest.net", category: "ネット" },
 ];
-// =========================
+
+/*
+追加方法：
+
+{ name: "ツール名", url: "URL", category: "カテゴリ" },
+
+カテゴリは自動で追加される
+*/
 
 
-// 描画処理（触らなくてOK）
-const container = document.getElementById("toolList");
+const grid = document.getElementById("toolGrid");
+const searchInput = document.getElementById("search");
+const categoryFilter = document.getElementById("categoryFilter");
 
-tools.forEach(tool => {
-  const card = document.createElement("div");
-  card.className = "card";
+function renderTools() {
+  const keyword = searchInput.value.toLowerCase();
+  const category = categoryFilter.value;
 
-  card.innerHTML = `
-    <div class="icon">${tool.icon}</div>
-    <div class="name">${tool.name}</div>
-    <div class="desc">${tool.desc}</div>
-    <div class="category">${tool.category}</div>
-  `;
+  grid.innerHTML = "";
 
-  card.onclick = () => {
-    if(tool.external){
-      window.open(tool.url, "_blank");
-    }else{
-      location.href = tool.url;
-    }
-  };
+  tools
+    .filter(tool =>
+      tool.name.toLowerCase().includes(keyword) &&
+      (category === "all" || tool.category === category)
+    )
+    .forEach(tool => {
+      const card = document.createElement("div");
+      card.className = "card";
 
-  container.appendChild(card);
-});
+      card.innerHTML = `
+        <h3>${tool.name}</h3>
+        <div class="category">${tool.category}</div>
+        <button class="open-btn" onclick="window.open('${tool.url}','_blank')">
+          開く
+        </button>
+      `;
+
+      grid.appendChild(card);
+    });
+}
+
+function initCategories() {
+  const categories = ["all", ...new Set(tools.map(t => t.category))];
+  categoryFilter.innerHTML = categories
+    .map(c => `<option value="${c}">${c}</option>`)
+    .join("");
+}
+
+searchInput.oninput = renderTools;
+categoryFilter.onchange = renderTools;
+
+
+/* =========================
+   ダーク / ライト
+========================= */
+function toggleMode() {
+  document.body.classList.toggle("light");
+  localStorage.setItem("mode", document.body.classList.contains("light") ? "light" : "dark");
+}
+
+if (localStorage.getItem("mode") === "light") {
+  document.body.classList.add("light");
+}
+
+
+/* =========================
+   テーマカラー
+========================= */
+function changeTheme(theme) {
+  document.body.classList.remove("theme-blue","theme-green","theme-purple","theme-orange");
+  document.body.classList.add(theme);
+  localStorage.setItem("theme", theme);
+}
+
+const savedTheme = localStorage.getItem("theme") || "theme-blue";
+changeTheme(savedTheme);
+document.getElementById("themeSelect").value = savedTheme;
+
+
+/* 初期化 */
+initCategories();
+renderTools();
 </script>
 
 </body>
