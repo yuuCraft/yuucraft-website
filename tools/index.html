@@ -126,13 +126,13 @@ main {
   <div class="controls">
     <input id="search" placeholder="検索">
     <select id="categoryFilter"></select>
-    <button onclick="toggleMode()">🌙/☀</button>
+    <button onclick="toggleMode()">ダーク/ライト</button>
 
     <select id="themeSelect" onchange="changeTheme(this.value)">
-      <option value="theme-blue">Blue</option>
-      <option value="theme-green">Green</option>
-      <option value="theme-purple">Purple</option>
-      <option value="theme-orange">Orange</option>
+      <option value="theme-blue">【テーマカラー】Blue</option>
+      <option value="theme-green">【テーマカラー】Green</option>
+      <option value="theme-purple">【テーマカラー】Purple</option>
+      <option value="theme-orange">【テーマカラー】Orange</option>
     </select>
   </div>
 </header>
@@ -149,19 +149,19 @@ const tools = [
   {
     name: "IP Address Picker",
     url: "https://yuucraft.com/tools/ip-address/",
-    category: "IPアドレス",
+    category: "【カテゴリ】IPアドレス",
     description: "自分のIPアドレスをチェックできるツール"
   },
   {
     name: "IP Address Picker +",
     url: "https://yuucraft.com/tools/ip-address+/",
-    category: "IPアドレス",
+    category: "【カテゴリ】IPアドレス",
     description: "Base64のエンコードとデコード"
   },
   {
     name: "IP Address Checker",
     url: "https://yuucraft.com/tools/ip-checker/",
-    category: "IPアドレス",
+    category: "【カテゴリ】IPアドレス",
     description: "自分のIPアドレスの状態を確認"
   },
 ];
@@ -191,7 +191,7 @@ function renderTools() {
     .filter(tool =>
       (tool.name.toLowerCase().includes(keyword) ||
        tool.description.toLowerCase().includes(keyword)) &&
-      (category === "all" || tool.category === category)
+      (category === "【カテゴリ】ALL" || tool.category === category)
     )
     .forEach(tool => {
       const card = document.createElement("div");
