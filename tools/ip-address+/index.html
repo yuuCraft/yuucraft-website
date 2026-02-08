@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>IP-Checker Plus</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: #0a0a0a;
+    color: #00ffff;
+    font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    border: 2px solid #00ffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 25px #00ffff44;
+    width: 320px;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 0;
+}
+
+.info {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.value {
+    color: #ffffff;
+}
+
+.note {
+    margin-top: 15px;
+    font-size: 11px;
+    color: #888;
+    text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>ネットワーク情報</h2>
+
+    <div class="info">IP: <span class="value" id="ip">取得中...</span></div>
+    <div class="info">国: <span class="value" id="country">取得中...</span></div>
+    <div class="info">地域: <span class="value" id="region">取得中...</span></div>
+    <div class="info">都市: <span class="value" id="city">取得中...</span></div>
+    <div class="info">プロバイダー: <span class="value" id="org">取得中...</span></div>
+    <div class="info">タイムゾーン: <span class="value" id="timezone">取得中...</span></div>
+
+    <div class="note">
+        ※ ipapi.co の無料サービスを使用
+    </div>
+</div>
+
+<script>
+fetch("https://ipapi.co/json/")
+.then(response => response.json())
+.then(data => {
+    document.getElementById("ip").textContent = data.ip;
+    document.getElementById("country").textContent = data.country_name;
+    document.getElementById("region").textContent = data.region;
+    document.getElementById("city").textContent = data.city;
+    document.getElementById("org").textContent = data.org;
+    document.getElementById("timezone").textContent = data.timezone;
+})
+.catch(() => {
+    document.querySelectorAll(".value").forEach(el => {
+        el.textContent = "取得失敗";
+    });
+});
+</script>
+
+</body>
+</html>
