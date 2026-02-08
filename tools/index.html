@@ -1,221 +1,80 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yuucraft Tools</title>
-
-<style>
-/* ===== テーマ変数 ===== */
-:root{
-    --bg:#ffffff;
-    --card:#f3f4f6;
-    --text:#111827;
-    --border:#d1d5db;
-    --accent:#0077ff;
-}
-
-body.dark{
-    --bg:#0b0f17;
-    --card:#111827;
-    --text:#e6edf3;
-    --border:#1f2937;
-    --accent:#00eaff;
-}
-
-body{
-    margin:0;
-    font-family:system-ui,-apple-system,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-}
-
-/* ===== ナビ ===== */
-nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px 25px;
-    border-bottom:1px solid var(--border);
-    background:var(--bg);
-    position:sticky;
-    top:0;
-}
-
-.logo{
-    font-size:1.4em;
-    font-weight:bold;
-    color:var(--accent);
-}
-
-.theme-btn{
-    padding:6px 12px;
-    border:1px solid var(--border);
-    background:var(--card);
-    color:var(--text);
-    border-radius:6px;
-    cursor:pointer;
-}
-
-/* ===== メイン ===== */
-.container{
-    max-width:1100px;
-    margin:auto;
-    padding:25px;
-}
-
-.search-box{
-    width:100%;
-    padding:12px;
-    border-radius:8px;
-    border:1px solid var(--border);
-    background:var(--card);
-    color:var(--text);
-    margin-bottom:15px;
-}
-
-/* カテゴリ */
-.categories{
-    margin-bottom:20px;
-}
-.cat-btn{
-    padding:6px 12px;
-    margin:4px;
-    border-radius:20px;
-    border:1px solid var(--border);
-    background:var(--card);
-    color:var(--text);
-    cursor:pointer;
-}
-.cat-btn.active{
-    border-color:var(--accent);
-    color:var(--accent);
-}
-
-/* グリッド */
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:18px;
-}
-
-/* カード */
-.card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:18px;
-    transition:0.2s;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-}
-body.dark .card:hover{
-    box-shadow:0 0 15px #00eaff22;
-}
-.card:hover{
-    transform:translateY(-4px);
-    border-color:var(--accent);
-}
-
-.icon{
-    font-size:26px;
-}
-
-.card h3{
-    margin:8px 0 5px;
-}
-
-.card p{
-    font-size:0.9em;
-    opacity:0.8;
-}
-
-.open-btn{
-    margin-top:12px;
-    padding:8px;
-    border-radius:8px;
-    border:none;
-    background:var(--accent);
-    color:#001018;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-footer{
-    text-align:center;
-    padding:30px;
-    border-top:1px solid var(--border);
-    margin-top:40px;
-}
-</style>
-</head>
-<body>
-
-<nav>
-    <div class="logo">Yuucraft Tools</div>
-    <button class="theme-btn" onclick="toggleTheme()">🌙 / ☀</button>
-</nav>
-
-<div class="container">
-
-<input type="text" id="search" class="search-box" placeholder="ツール検索...">
-
-<div class="categories" id="categories"></div>
-
-<div class="grid" id="toolGrid"></div>
-
-</div>
-
-<footer>
-© 2026 Yuucraft
-</footer>
-
 <script>
-/* ===== テーマ保存 ===== */
-if(localStorage.getItem("theme")==="dark"){
-    document.body.classList.add("dark");
-}
+/* ===== 設定 ===== */
+const BASE_PATH = "/tools/";
+const NEW_DAYS = 7; // 何日以内をNEWにする
 
-function toggleTheme(){
-    document.body.classList.toggle("dark");
-    localStorage.setItem("theme",
-        document.body.classList.contains("dark") ? "dark" : "light"
-    );
-}
-
-/* ===== ツール一覧（/tools/に変更） ===== */
+/* ===== ツール定義 ===== */
 const tools = [
 {
     name: "IP Address",
     desc: "現在のIPアドレスを表示",
-    url: "/tools/ip-address/",
+    path: "ip-address",
     category: "Network",
-    icon: "🌐"
+    icon: "🌐",
+    added: "2026-02-07"
 },
 {
     name: "IP Address+",
     desc: "IPの詳細情報を表示",
-    url: "/tools/ip-address+/",
+    path: "ip-address+",
     category: "Network",
-    icon: "⚡"
+    icon: "⚡",
+    added: "2026-02-07"
 },
 {
     name: "IP Checker",
-    desc: "指定したIPの情報を検索",
-    url: "/tools/ip-checker/",
+    desc: "IPを検索",
+    path: "ip-checker",
     category: "Network",
-    icon: "🔍"
+    icon: "🔍",
+    added: "2026-02-07"
+},
+
+/* 外部リンク例 */
+{
+    name: "外部ツール",
+    desc: "外部サイト",
+    url: "https://example.com",
+    external: true,
+    category: "External",
+    icon: "🌍",
+    added: "2026-02-08"
 }
 ];
 
-const categoriesDiv = document.getElementById("categories");
+/* ===== 使用回数 ===== */
+function getUsage(){
+    return JSON.parse(localStorage.getItem("tool_usage") || "{}");
+}
+
+function addUsage(name){
+    const usage = getUsage();
+    usage[name] = (usage[name] || 0) + 1;
+    localStorage.setItem("tool_usage", JSON.stringify(usage));
+}
+
+/* ===== URL生成 ===== */
+function getToolUrl(tool){
+    if(tool.external) return tool.url;
+    return BASE_PATH + tool.path + "/";
+}
+
+/* ===== NEW判定 ===== */
+function isNew(dateStr){
+    if(!dateStr) return false;
+    const added = new Date(dateStr);
+    const now = new Date();
+    const diff = (now - added) / (1000*60*60*24);
+    return diff <= NEW_DAYS;
+}
+
+/* ===== 表示 ===== */
 const grid = document.getElementById("toolGrid");
 const search = document.getElementById("search");
+const categoriesDiv = document.getElementById("categories");
 
 let currentCategory = "All";
 
-/* カテゴリ生成 */
 function getCategories(){
     const cats = ["All"];
     tools.forEach(t=>{
@@ -239,9 +98,9 @@ function renderCategories(){
     });
 }
 
-/* ツール表示 */
 function renderTools(){
     const keyword = search.value.toLowerCase();
+    const usage = getUsage();
     grid.innerHTML = "";
 
     tools.forEach(tool=>{
@@ -249,28 +108,68 @@ function renderTools(){
         if(!tool.name.toLowerCase().includes(keyword) &&
            !tool.desc.toLowerCase().includes(keyword)) return;
 
+        const url = getToolUrl(tool);
+        const count = usage[tool.name] || 0;
+        const newLabel = isNew(tool.added) ? `<span style="color:red;font-size:12px;margin-left:6px;">NEW</span>` : "";
+
         const card = document.createElement("div");
         card.className = "card";
 
         card.innerHTML = `
             <div>
                 <div class="icon">${tool.icon}</div>
-                <h3>${tool.name}</h3>
+                <h3>${tool.name} ${newLabel}</h3>
                 <p>${tool.desc}</p>
-                <small style="color:var(--accent)">${tool.category}</small>
+                <small style="color:var(--accent)">${tool.category}</small><br>
+                <small>使用回数: ${count}</small>
             </div>
-            <button class="open-btn" onclick="location.href='${tool.url}'">開く</button>
+            <button class="open-btn">使用</button>
         `;
+
+        card.querySelector("button").onclick = ()=>{
+            addUsage(tool.name);
+            location.href = url;
+        };
 
         grid.appendChild(card);
     });
+
+    renderRanking();
 }
 
 search.addEventListener("input", renderTools);
 
+/* ===== 人気ランキング ===== */
+function renderRanking(){
+    let rankingDiv = document.getElementById("ranking");
+
+    if(!rankingDiv){
+        rankingDiv = document.createElement("div");
+        rankingDiv.id = "ranking";
+        rankingDiv.style.marginTop = "40px";
+        grid.parentNode.appendChild(rankingDiv);
+    }
+
+    const usage = getUsage();
+
+    const sorted = [...tools].sort((a,b)=>{
+        return (usage[b.name]||0) - (usage[a.name]||0);
+    }).slice(0,5);
+
+    rankingDiv.innerHTML = "<h2>人気ツール</h2>";
+
+    sorted.forEach((tool,i)=>{
+        const url = getToolUrl(tool);
+        const count = usage[tool.name] || 0;
+
+        const item = document.createElement("div");
+        item.style.margin = "6px 0";
+        item.innerHTML = `${i+1}. <a href="${url}">${tool.name}</a> (${count})`;
+        rankingDiv.appendChild(item);
+    });
+}
+
+/* ===== 初期表示 ===== */
 renderCategories();
 renderTools();
 </script>
-
-</body>
-</html>
