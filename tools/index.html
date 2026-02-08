@@ -19,7 +19,6 @@
   --text: #111;
 }
 
-/* カラーテーマ */
 .theme-blue { --accent: #4da3ff; }
 .theme-green { --accent: #4caf50; }
 .theme-purple { --accent: #a855f7; }
@@ -71,28 +70,50 @@ main {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
 }
 
+/* ▼高さを揃えるためのポイント */
 .card {
   background: var(--card);
   padding: 14px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 160px;
 }
 
 .card h3 {
   margin: 0 0 6px 0;
+  font-size: 16px;
 }
 
 .category {
   font-size: 12px;
   opacity: 0.7;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
+.description {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-bottom: 10px;
+  line-height: 1.4;
+
+  /* 高さを揃えるため最大行数制限 */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ボタンを下固定 */
 .open-btn {
+  margin-top: auto;
   width: 100%;
 }
 </style>
@@ -105,7 +126,6 @@ main {
   <div class="controls">
     <input id="search" placeholder="検索">
     <select id="categoryFilter"></select>
-
     <button onclick="toggleMode()">🌙/☀</button>
 
     <select id="themeSelect" onchange="changeTheme(this.value)">
@@ -123,24 +143,45 @@ main {
 
 <script>
 /* =========================
-   ▼ここを編集すればOK
+   ▼ここを編集
 ========================= */
 const tools = [
-  { name: "JSON Formatter", url: "https://jsonformatter.org", category: "開発" },
-  { name: "Base64 Encode/Decode", url: "https://www.base64encode.org", category: "開発" },
-  { name: "Image Compressor", url: "https://tinypng.com", category: "画像" },
-  { name: "Color Picker", url: "https://imagecolorpicker.com", category: "デザイン" },
-  { name: "Speed Test", url: "https://www.speedtest.net", category: "ネット" },
+  {
+    name: "JSON Formatter",
+    url: "https://jsonformatter.org",
+    category: "開発",
+    description: "JSONの整形・検証ができるツール"
+  },
+  {
+    name: "Base64 Tool",
+    url: "https://www.base64encode.org",
+    category: "開発",
+    description: "Base64のエンコードとデコード"
+  },
+  {
+    name: "TinyPNG",
+    url: "https://tinypng.com",
+    category: "画像",
+    description: "画像を高品質のまま圧縮"
+  },
+  {
+    name: "Color Picker",
+    url: "https://imagecolorpicker.com",
+    category: "デザイン",
+    description: "画像から色コードを取得"
+  }
 ];
 
 /*
-追加方法：
+追加方法
 
-{ name: "ツール名", url: "URL", category: "カテゴリ" },
-
-カテゴリは自動で追加される
+{
+  name: "名前",
+  url: "URL",
+  category: "カテゴリ",
+  description: "説明"
+}
 */
-
 
 const grid = document.getElementById("toolGrid");
 const searchInput = document.getElementById("search");
@@ -154,7 +195,8 @@ function renderTools() {
 
   tools
     .filter(tool =>
-      tool.name.toLowerCase().includes(keyword) &&
+      (tool.name.toLowerCase().includes(keyword) ||
+       tool.description.toLowerCase().includes(keyword)) &&
       (category === "all" || tool.category === category)
     )
     .forEach(tool => {
@@ -164,6 +206,7 @@ function renderTools() {
       card.innerHTML = `
         <h3>${tool.name}</h3>
         <div class="category">${tool.category}</div>
+        <div class="description">${tool.description}</div>
         <button class="open-btn" onclick="window.open('${tool.url}','_blank')">
           開く
         </button>
@@ -183,10 +226,7 @@ function initCategories() {
 searchInput.oninput = renderTools;
 categoryFilter.onchange = renderTools;
 
-
-/* =========================
-   ダーク / ライト
-========================= */
+/* ダーク/ライト */
 function toggleMode() {
   document.body.classList.toggle("light");
   localStorage.setItem("mode", document.body.classList.contains("light") ? "light" : "dark");
@@ -196,10 +236,7 @@ if (localStorage.getItem("mode") === "light") {
   document.body.classList.add("light");
 }
 
-
-/* =========================
-   テーマカラー
-========================= */
+/* テーマ */
 function changeTheme(theme) {
   document.body.classList.remove("theme-blue","theme-green","theme-purple","theme-orange");
   document.body.classList.add(theme);
@@ -209,7 +246,6 @@ function changeTheme(theme) {
 const savedTheme = localStorage.getItem("theme") || "theme-blue";
 changeTheme(savedTheme);
 document.getElementById("themeSelect").value = savedTheme;
-
 
 /* 初期化 */
 initCategories();
