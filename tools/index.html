@@ -191,7 +191,7 @@ function renderTools() {
     .filter(tool =>
       (tool.name.toLowerCase().includes(keyword) ||
        tool.description.toLowerCase().includes(keyword)) &&
-      (category === "【カテゴリ】ALL" || tool.category === category)
+      (category === "all" || tool.category === category)
     )
     .forEach(tool => {
       const card = document.createElement("div");
