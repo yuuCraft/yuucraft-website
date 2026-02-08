@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Note記事整形ツール</title>
+<style>
+body{
+    margin:0;
+    font-family: "Hiragino Sans","Noto Sans JP",sans-serif;
+    background:#111;
+    color:#eee;
+}
+
+header{
+    background:#1a1a1a;
+    padding:15px;
+    font-size:20px;
+    font-weight:bold;
+    text-align:center;
+    border-bottom:1px solid #333;
+}
+
+.container{
+    display:flex;
+    height:calc(100vh - 60px);
+}
+
+.editor, .preview{
+    width:50%;
+    padding:15px;
+    box-sizing:border-box;
+}
+
+textarea{
+    width:100%;
+    height:100%;
+    background:#0d0d0d;
+    color:#fff;
+    border:1px solid #333;
+    resize:none;
+    font-size:15px;
+    line-height:1.6;
+    padding:10px;
+}
+
+.preview{
+    background:#181818;
+    overflow:auto;
+}
+
+.toolbar{
+    padding:10px;
+    background:#1a1a1a;
+    border-bottom:1px solid #333;
+}
+
+button{
+    margin:3px;
+    padding:6px 10px;
+    background:#222;
+    color:#fff;
+    border:1px solid #444;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#333;
+}
+
+.copy-btn{
+    background:#00c853;
+    border:none;
+}
+</style>
+</head>
+<body>
+
+<header>Note記事整形ツール（コピペ用）</header>
+
+<div class="toolbar">
+    <button onclick="insert('## 見出し\n')">H2</button>
+    <button onclick="insert('### 小見出し\n')">H3</button>
+    <button onclick="insert('**太字**')">太字</button>
+    <button onclick="insert('> 引用\n')">引用</button>
+    <button onclick="insert('- 箇条書き\n')">リスト</button>
+    <button onclick="insert('---\n')">区切り線</button>
+    <button onclick="insert('```\nコード\n```\n')">コード</button>
+    <button class="copy-btn" onclick="copyText()">全部コピー</button>
+</div>
+
+<div class="container">
+    <div class="editor">
+        <textarea id="editor" placeholder="ここに記事を書くと、整形してNoteに貼れます。
+
+例：
+## 見出し
+本文
+
+### 小見出し
+- リスト
+- リスト
+"></textarea>
+    </div>
+
+    <div class="preview" id="preview"></div>
+</div>
+
+<script>
+const editor = document.getElementById("editor");
+const preview = document.getElementById("preview");
+
+editor.addEventListener("input", updatePreview);
+
+function insert(text){
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    editor.value = editor.value.substring(0,start) + text + editor.value.substring(end);
+    editor.focus();
+    updatePreview();
+}
+
+function copyText(){
+    editor.select();
+    document.execCommand("copy");
+    alert("コピーしました！Noteに貼り付けてください");
+}
+
+function updatePreview(){
+    let text = editor.value;
+
+    // 簡易Markdown変換
+    text = text
+        .replace(/^### (.*$)/gim, "<h3>$1</h3>")
+        .replace(/^## (.*$)/gim, "<h2>$1</h2>")
+        .replace(/^\> (.*$)/gim, "<blockquote>$1</blockquote>")
+        .replace(/^\- (.*$)/gim, "<li>$1</li>")
+        .replace(/\*\*(.*?)\*\*/gim, "<b>$1</b>")
+        .replace(/\n/g, "<br>");
+
+    preview.innerHTML = text;
+}
+
+updatePreview();
+</script>
+
+</body>
+</html>
