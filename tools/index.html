@@ -10,31 +10,45 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
   <style>
-    body {
+    html, body {
+      height: 100%;
+      width: 100%;
       box-sizing: border-box;
     }
+    
+    #app {
+      height: 100%;
+    }
+
     .font-display {
       font-family: 'Space Grotesk', 'Noto Sans JP', sans-serif;
     }
+    
     .font-body {
       font-family: 'Noto Sans JP', sans-serif;
     }
+    
     .tool-card {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    
     .tool-card:hover {
       transform: translateY(-4px);
     }
+    
     .new-badge {
       animation: pulse 2s infinite;
     }
+    
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.7; }
     }
+    
     .category-btn {
       transition: all 0.2s ease;
     }
+    
     .category-btn.active {
       background: linear-gradient(135deg, #6366f1, #8b5cf6);
       color: white;
@@ -43,8 +57,8 @@
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full font-body">
-  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);"><!-- Header -->
+ <body class="font-body">
+  <div id="app" class="w-full h-full overflow-auto" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);"><!-- Header -->
    <header class="relative py-16 px-6 text-center overflow-hidden">
     <div class="absolute inset-0 opacity-30">
      <div class="absolute top-10 left-10 w-72 h-72 bg-purple-500 rounded-full filter blur-3xl"></div>
@@ -85,7 +99,7 @@
         icon: '🎨',
         category: 'デザイン',
         url: 'https://example.com/color-picker',
-        addedDate: '2025-01-10' // 追加日（YYYY-MM-DD形式）
+        addedDate: '2025-01-10'
       },
       {
         id: 'json-formatter',
@@ -185,7 +199,7 @@
 
     // NEWバッジの判定（追加から3日以内）
     function isNew(addedDate) {
-      const added = new Date(addedDate);
+      const added = new Date(addedDate + 'T00:00:00Z');
       const now = new Date();
       const diffTime = now - added;
       const diffDays = diffTime / (1000 * 60 * 60 * 24);
@@ -234,9 +248,8 @@
     // カテゴリボタンを生成
     function createCategoryButton(category, isActive) {
       return `
-        <button class="category-btn px-4 py-2 rounded-full text-sm font-medium transition-all
-                       ${isActive ? 'active' : ''}"
-                style="${!isActive ? `background: ${config.card_color}; color: ${config.text_color};` : ''}"
+        <button class="category-btn px-4 py-2 rounded-full text-sm font-medium transition-all"
+                style="${isActive ? '' : `background: ${config.card_color}; color: ${config.text_color};`}"
                 data-category="${category}">
           ${category}
         </button>
@@ -304,44 +317,46 @@
     }
 
     // SDK初期化
-    window.elementSdk.init({
-      defaultConfig,
-      onConfigChange,
-      mapToCapabilities: (cfg) => ({
-        recolorables: [
-          {
-            get: () => cfg.primary_color || defaultConfig.primary_color,
-            set: (v) => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
-          },
-          {
-            get: () => cfg.secondary_color || defaultConfig.secondary_color,
-            set: (v) => { cfg.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
-          },
-          {
-            get: () => cfg.text_color || defaultConfig.text_color,
-            set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
-          },
-          {
-            get: () => cfg.accent_color || defaultConfig.accent_color,
-            set: (v) => { cfg.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }
-          },
-          {
-            get: () => cfg.card_color || defaultConfig.card_color,
-            set: (v) => { cfg.card_color = v; window.elementSdk.setConfig({ card_color: v }); }
-          }
-        ],
-        borderables: [],
-        fontEditable: undefined,
-        fontSizeable: undefined
-      }),
-      mapToEditPanelValues: (cfg) => new Map([
-        ['site_title', cfg.site_title || defaultConfig.site_title],
-        ['site_description', cfg.site_description || defaultConfig.site_description]
-      ])
-    });
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            {
+              get: () => cfg.primary_color || defaultConfig.primary_color,
+              set: (v) => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
+            },
+            {
+              get: () => cfg.secondary_color || defaultConfig.secondary_color,
+              set: (v) => { cfg.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
+            },
+            {
+              get: () => cfg.text_color || defaultConfig.text_color,
+              set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+            },
+            {
+              get: () => cfg.accent_color || defaultConfig.accent_color,
+              set: (v) => { cfg.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }
+            },
+            {
+              get: () => cfg.card_color || defaultConfig.card_color,
+              set: (v) => { cfg.card_color = v; window.elementSdk.setConfig({ card_color: v }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ['site_title', cfg.site_title || defaultConfig.site_title],
+          ['site_description', cfg.site_description || defaultConfig.site_description]
+        ])
+      });
+    }
 
     // 初期描画
     renderUI();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9caf8a83b7b2eb72',t:'MTc3MDU5OTk5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cafa2dc1623d483',t:'MTc3MDYwMDk5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
