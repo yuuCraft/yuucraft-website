@@ -1,256 +1,347 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ゆーくらTools</title>
-
-<style>
-:root {
-  --bg: #0f1115;
-  --card: #1a1d24;
-  --text: #ffffff;
-  --accent: #4da3ff;
-}
-
-.light {
-  --bg: #f5f7fa;
-  --card: #ffffff;
-  --text: #111;
-}
-
-.theme-blue { --accent: #4da3ff; }
-.theme-green { --accent: #4caf50; }
-.theme-purple { --accent: #a855f7; }
-.theme-orange { --accent: #ff9800; }
-
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  transition: 0.3s;
-}
-
-header {
-  padding: 16px;
-  background: var(--card);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-}
-
-h1 {
-  margin: 0;
-  font-size: 20px;
-}
-
-.controls {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-input, select, button {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: none;
-}
-
-button {
-  cursor: pointer;
-  background: var(--accent);
-  color: white;
-}
-
-main {
-  padding: 20px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
-}
-
-/* ▼高さを揃えるためのポイント */
-.card {
-  background: var(--card);
-  padding: 14px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 160px;
-}
-
-.card h3 {
-  margin: 0 0 6px 0;
-  font-size: 16px;
-}
-
-.category {
-  font-size: 12px;
-  opacity: 0.7;
-  margin-bottom: 6px;
-}
-
-.description {
-  font-size: 13px;
-  opacity: 0.85;
-  margin-bottom: 10px;
-  line-height: 1.4;
-
-  /* 高さを揃えるため最大行数制限 */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* ボタンを下固定 */
-.open-btn {
-  margin-top: auto;
-  width: 100%;
-}
-</style>
-</head>
-<body>
-
-<header>
-  <h1>ゆーくらTools</h1>
-
-  <div class="controls">
-    <input id="search" placeholder="検索">
-    <select id="categoryFilter"></select>
-    <button onclick="toggleMode()">ダーク/ライト</button>
-
-    <select id="themeSelect" onchange="changeTheme(this.value)">
-      <option value="theme-blue">【テーマカラー】Blue</option>
-      <option value="theme-green">【テーマカラー】Green</option>
-      <option value="theme-purple">【テーマカラー】Purple</option>
-      <option value="theme-orange">【テーマカラー】Orange</option>
-    </select>
+<!doctype html>
+<html lang="ja" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tool Collection</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    .font-display {
+      font-family: 'Space Grotesk', 'Noto Sans JP', sans-serif;
+    }
+    .font-body {
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .tool-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .tool-card:hover {
+      transform: translateY(-4px);
+    }
+    .new-badge {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .category-btn {
+      transition: all 0.2s ease;
+    }
+    .category-btn.active {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body">
+  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);"><!-- Header -->
+   <header class="relative py-16 px-6 text-center overflow-hidden">
+    <div class="absolute inset-0 opacity-30">
+     <div class="absolute top-10 left-10 w-72 h-72 bg-purple-500 rounded-full filter blur-3xl"></div>
+     <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-500 rounded-full filter blur-3xl"></div>
+    </div>
+    <div class="relative z-10">
+     <h1 id="site-title" class="font-display text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">ツールコレクション</h1>
+     <p id="site-description" class="text-xl text-slate-300 max-w-2xl mx-auto">便利なツールを集めました</p>
+    </div>
+   </header><!-- Category Filter -->
+   <nav class="px-6 pb-8">
+    <div class="flex flex-wrap justify-center gap-3" id="category-filters"><!-- カテゴリボタンは動的に生成されます -->
+    </div>
+   </nav><!-- Tools Grid -->
+   <main class="px-6 pb-16">
+    <div id="tools-grid" class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"><!-- ツールカードは動的に生成されます -->
+    </div><!-- No Results -->
+    <div id="no-results" class="hidden text-center py-16">
+     <div class="text-6xl mb-4">
+      🔍
+     </div>
+     <p class="text-slate-400 text-lg">該当するツールが見つかりません</p>
+    </div>
+   </main><!-- Footer -->
+   <footer class="border-t border-slate-700/50 py-8 px-6 text-center">
+    <p class="text-slate-500 text-sm"><span id="tool-count">0</span> 個のツールを掲載中</p>
+   </footer>
   </div>
-</header>
+  <script>
+    // ============================================
+    // ツールデータ（ここに新しいツールを追加）
+    // ============================================
+    const TOOLS = [
+      {
+        id: 'color-picker',
+        name: 'カラーピッカー',
+        description: '画面上の色を取得できるツール',
+        icon: '🎨',
+        category: 'デザイン',
+        url: 'https://example.com/color-picker',
+        addedDate: '2025-01-10' // 追加日（YYYY-MM-DD形式）
+      },
+      {
+        id: 'json-formatter',
+        name: 'JSON整形ツール',
+        description: 'JSONを見やすく整形・検証',
+        icon: '📋',
+        category: '開発',
+        url: 'https://example.com/json-formatter',
+        addedDate: '2025-01-08'
+      },
+      {
+        id: 'image-compressor',
+        name: '画像圧縮',
+        description: '画像ファイルを軽量化',
+        icon: '🖼️',
+        category: 'メディア',
+        url: 'https://example.com/image-compressor',
+        addedDate: '2025-01-12'
+      },
+      {
+        id: 'password-generator',
+        name: 'パスワード生成',
+        description: '安全なパスワードを自動生成',
+        icon: '🔐',
+        category: 'セキュリティ',
+        url: 'https://example.com/password-generator',
+        addedDate: '2024-12-20'
+      },
+      {
+        id: 'qr-generator',
+        name: 'QRコード生成',
+        description: 'URLやテキストからQRコードを作成',
+        icon: '📱',
+        category: 'ユーティリティ',
+        url: 'https://example.com/qr-generator',
+        addedDate: '2025-01-11'
+      },
+      {
+        id: 'markdown-editor',
+        name: 'Markdownエディタ',
+        description: 'リアルタイムプレビュー付きエディタ',
+        icon: '📝',
+        category: '開発',
+        url: 'https://example.com/markdown-editor',
+        addedDate: '2024-11-15'
+      },
+      {
+        id: 'unit-converter',
+        name: '単位変換',
+        description: '長さ・重さ・温度などを変換',
+        icon: '📐',
+        category: 'ユーティリティ',
+        url: 'https://example.com/unit-converter',
+        addedDate: '2024-10-01'
+      },
+      {
+        id: 'gradient-maker',
+        name: 'グラデーション作成',
+        description: '美しいCSSグラデーションを生成',
+        icon: '🌈',
+        category: 'デザイン',
+        url: 'https://example.com/gradient-maker',
+        addedDate: '2025-01-09'
+      }
+    ];
 
-<main>
-  <div class="grid" id="toolGrid"></div>
-</main>
+    // ============================================
+    // 新しいツールを追加する方法
+    // ============================================
+    // 上のTOOLS配列に以下の形式でオブジェクトを追加してください：
+    // {
+    //   id: 'unique-id',        // 一意のID
+    //   name: 'ツール名',        // 表示名
+    //   description: '説明文',   // 簡単な説明
+    //   icon: '絵文字',          // アイコン（絵文字）
+    //   category: 'カテゴリ',    // カテゴリ名
+    //   url: 'https://...',     // リンク先URL
+    //   addedDate: 'YYYY-MM-DD' // 追加日
+    // }
 
-<script>
-/* =========================
-   ▼ここを編集（{から},までをそのまんま調整、最終のものは};ってね）
-========================= */
-const tools = [
-  {
-    name: "IP Address Picker",
-    url: "https://yuucraft.com/tools/ip-address/",
-    category: "【カテゴリ】IPアドレス",
-    description: "自分のIPアドレスをチェックできるツール"
-  },
-  {
-    name: "IP Address Picker +",
-    url: "https://yuucraft.com/tools/ip-address+/",
-    category: "【カテゴリ】IPアドレス",
-    description: "IPアドレスから入手できる情報を詳しくチェックできるツール"
-  },
-  {
-    name: "IP Address Checker",
-    url: "https://yuucraft.com/tools/ip-checker/",
-    category: "【カテゴリ】IPアドレス",
-    description: "自分のIPアドレスの状態を確認できるツール"
-  },
-  {
-    name: "YouTube Tool",
-    url: "https://yuucraft.com/tools/youtube-tool/",
-    category: "【カテゴリ】YouTube",
-    description: "非公式のYouTubeツール。"
-  },
-];
+    // ============================================
+    // アプリケーションロジック
+    // ============================================
+    
+    const defaultConfig = {
+      site_title: 'ツールコレクション',
+      site_description: '便利なツールを集めました',
+      primary_color: '#6366f1',
+      secondary_color: '#1e1b4b',
+      text_color: '#f1f5f9',
+      accent_color: '#22d3ee',
+      card_color: '#1e293b'
+    };
 
-/*
-追加方法
+    let config = { ...defaultConfig };
+    let currentCategory = 'すべて';
 
-{
-  name: "名前",
-  url: "URL",
-  category: "カテゴリ",
-  description: "説明"
-}
-*/
+    // NEWバッジの判定（追加から3日以内）
+    function isNew(addedDate) {
+      const added = new Date(addedDate);
+      const now = new Date();
+      const diffTime = now - added;
+      const diffDays = diffTime / (1000 * 60 * 60 * 24);
+      return diffDays <= 3;
+    }
 
-const grid = document.getElementById("toolGrid");
-const searchInput = document.getElementById("search");
-const categoryFilter = document.getElementById("categoryFilter");
+    // カテゴリ一覧を取得
+    function getCategories() {
+      const categories = [...new Set(TOOLS.map(tool => tool.category))];
+      return ['すべて', ...categories.sort()];
+    }
 
-function renderTools() {
-  const keyword = searchInput.value.toLowerCase();
-  const category = categoryFilter.value;
+    // ツールカードを生成
+    function createToolCard(tool) {
+      const isNewTool = isNew(tool.addedDate);
+      return `
+        <a href="${tool.url}" target="_blank" rel="noopener noreferrer" 
+           class="tool-card block rounded-2xl p-6 shadow-xl border border-slate-700/50 hover:border-indigo-500/50 hover:shadow-indigo-500/10"
+           style="background: ${config.card_color};">
+          <div class="flex items-start justify-between mb-4">
+            <span class="text-4xl">${tool.icon}</span>
+            ${isNewTool ? `
+              <span class="new-badge px-2 py-1 text-xs font-bold rounded-full"
+                    style="background: linear-gradient(135deg, #f43f5e, #ec4899); color: white;">
+                NEW
+              </span>
+            ` : ''}
+          </div>
+          <h3 class="font-display font-bold text-lg mb-2" style="color: ${config.text_color};">
+            ${tool.name}
+          </h3>
+          <p class="text-sm mb-4" style="color: ${config.text_color}; opacity: 0.7;">
+            ${tool.description}
+          </p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs px-3 py-1 rounded-full" 
+                  style="background: ${config.primary_color}20; color: ${config.accent_color};">
+              ${tool.category}
+            </span>
+            <span style="color: ${config.accent_color};">→</span>
+          </div>
+        </a>
+      `;
+    }
 
-  grid.innerHTML = "";
-
-  tools
-    .filter(tool =>
-      (tool.name.toLowerCase().includes(keyword) ||
-       tool.description.toLowerCase().includes(keyword)) &&
-      (category === "all" || tool.category === category)
-    )
-    .forEach(tool => {
-      const card = document.createElement("div");
-      card.className = "card";
-
-      card.innerHTML = `
-        <h3>${tool.name}</h3>
-        <div class="category">${tool.category}</div>
-        <div class="description">${tool.description}</div>
-        <button class="open-btn" onclick="window.open('${tool.url}','_blank')">
-          開く
+    // カテゴリボタンを生成
+    function createCategoryButton(category, isActive) {
+      return `
+        <button class="category-btn px-4 py-2 rounded-full text-sm font-medium transition-all
+                       ${isActive ? 'active' : ''}"
+                style="${!isActive ? `background: ${config.card_color}; color: ${config.text_color};` : ''}"
+                data-category="${category}">
+          ${category}
         </button>
       `;
+    }
 
-      grid.appendChild(card);
+    // フィルタリングされたツールを取得
+    function getFilteredTools() {
+      if (currentCategory === 'すべて') {
+        return TOOLS;
+      }
+      return TOOLS.filter(tool => tool.category === currentCategory);
+    }
+
+    // UIを更新
+    function renderUI() {
+      // サイトタイトル・説明を更新
+      document.getElementById('site-title').textContent = config.site_title || defaultConfig.site_title;
+      document.getElementById('site-description').textContent = config.site_description || defaultConfig.site_description;
+
+      // カテゴリフィルターを描画
+      const categories = getCategories();
+      const filtersContainer = document.getElementById('category-filters');
+      filtersContainer.innerHTML = categories.map(cat => 
+        createCategoryButton(cat, cat === currentCategory)
+      ).join('');
+
+      // カテゴリボタンのイベントリスナーを追加
+      filtersContainer.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentCategory = btn.dataset.category;
+          renderUI();
+        });
+      });
+
+      // ツールグリッドを描画
+      const filteredTools = getFilteredTools();
+      const toolsGrid = document.getElementById('tools-grid');
+      const noResults = document.getElementById('no-results');
+
+      if (filteredTools.length === 0) {
+        toolsGrid.innerHTML = '';
+        noResults.classList.remove('hidden');
+      } else {
+        noResults.classList.add('hidden');
+        // NEWのツールを先頭に、その後は追加日の新しい順
+        const sortedTools = [...filteredTools].sort((a, b) => {
+          const aIsNew = isNew(a.addedDate);
+          const bIsNew = isNew(b.addedDate);
+          if (aIsNew && !bIsNew) return -1;
+          if (!aIsNew && bIsNew) return 1;
+          return new Date(b.addedDate) - new Date(a.addedDate);
+        });
+        toolsGrid.innerHTML = sortedTools.map(createToolCard).join('');
+      }
+
+      // ツール数を更新
+      document.getElementById('tool-count').textContent = TOOLS.length;
+    }
+
+    // 設定変更時の処理
+    async function onConfigChange(newConfig) {
+      config = { ...defaultConfig, ...newConfig };
+      renderUI();
+    }
+
+    // SDK初期化
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange,
+      mapToCapabilities: (cfg) => ({
+        recolorables: [
+          {
+            get: () => cfg.primary_color || defaultConfig.primary_color,
+            set: (v) => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
+          },
+          {
+            get: () => cfg.secondary_color || defaultConfig.secondary_color,
+            set: (v) => { cfg.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
+          },
+          {
+            get: () => cfg.text_color || defaultConfig.text_color,
+            set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+          },
+          {
+            get: () => cfg.accent_color || defaultConfig.accent_color,
+            set: (v) => { cfg.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }
+          },
+          {
+            get: () => cfg.card_color || defaultConfig.card_color,
+            set: (v) => { cfg.card_color = v; window.elementSdk.setConfig({ card_color: v }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (cfg) => new Map([
+        ['site_title', cfg.site_title || defaultConfig.site_title],
+        ['site_description', cfg.site_description || defaultConfig.site_description]
+      ])
     });
-}
 
-function initCategories() {
-  const categories = ["all", ...new Set(tools.map(t => t.category))];
-  categoryFilter.innerHTML = categories
-    .map(c => `<option value="${c}">${c}</option>`)
-    .join("");
-}
-
-searchInput.oninput = renderTools;
-categoryFilter.onchange = renderTools;
-
-/* ダーク/ライト */
-function toggleMode() {
-  document.body.classList.toggle("light");
-  localStorage.setItem("mode", document.body.classList.contains("light") ? "light" : "dark");
-}
-
-if (localStorage.getItem("mode") === "light") {
-  document.body.classList.add("light");
-}
-
-/* テーマ */
-function changeTheme(theme) {
-  document.body.classList.remove("theme-blue","theme-green","theme-purple","theme-orange");
-  document.body.classList.add(theme);
-  localStorage.setItem("theme", theme);
-}
-
-const savedTheme = localStorage.getItem("theme") || "theme-blue";
-changeTheme(savedTheme);
-document.getElementById("themeSelect").value = savedTheme;
-
-/* 初期化 */
-initCategories();
-renderTools();
-</script>
-
-</body>
+    // 初期描画
+    renderUI();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9caf8a83b7b2eb72',t:'MTc3MDU5OTk5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
